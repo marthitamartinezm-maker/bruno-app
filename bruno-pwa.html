@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1E2A35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BRUNO</title>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1E2A35;
+  --navy2: #2C3A4A;
+  --cream: #F7F3EE;
+  --sand: #EDE8E2;
+  --terra: #C4714A;
+  --terra2: #E8957A;
+  --sage: #7A9E8E;
+  --amber: #D4A843;
+  --purple: #9B7FBE;
+  --ink: #1E2A35;
+  --muted: #8A9AAB;
+  --white: #fff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; flex-direction: column; min-height: 100vh; padding-bottom: 70px; }
+.screen.active { display: flex; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: var(--white);
+  border-top: 1px solid var(--sand);
+  display: flex;
+  padding: 8px 0 20px;
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.nav-btn-icon { font-size: 22px; line-height: 1; }
+.nav-btn-label { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); }
+.nav-btn.active .nav-btn-label { color: var(--terra); }
+.nav-btn-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--terra); }
+
+/* ── INICIO ── */
+.hero {
+  background: linear-gradient(160deg, var(--navy2), var(--navy));
+  padding: 52px 22px 28px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hero::before {
+  content:'';
+  position:absolute; top:-40px; right:-40px;
+  width:180px; height:180px; border-radius:50%;
+  background: radial-gradient(circle, rgba(196,113,74,.25) 0%, transparent 70%);
+}
+.hero-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.hero-greeting { font-size:11px; color:rgba(255,255,255,.5); letter-spacing:1.5px; text-transform:uppercase; }
+.hero-name { font-family:'Gilda Display',serif; font-size:30px; color:#fff; line-height:1; margin-top:2px; }
+.hero-avatar {
+  width:46px; height:46px; border-radius:50%;
+  background: linear-gradient(135deg, var(--terra), var(--amber));
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px;
+  box-shadow: 0 4px 12px rgba(196,113,74,.4);
+}
+.hero-card {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ring-wrap { position:relative; width:56px; height:56px; flex-shrink:0; }
+.ring-wrap svg { transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:rgba(255,255,255,.12); stroke-width:5; }
+.ring-fill { fill:none; stroke:var(--terra2); stroke-width:5; stroke-linecap:round; stroke-dasharray:138; stroke-dashoffset:41; }
+.ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Gilda Display',serif; font-size:15px; color:#fff; }
+.hero-info h3 { font-size:13px; font-weight:700; color:#fff; }
+.hero-info p { font-size:11px; color:rgba(255,255,255,.5); margin-top:2px; }
+.hero-pills { display:flex; gap:6px; margin-top:8px; }
+.pill { padding:3px 9px; border-radius:20px; font-size:10px; font-weight:700; }
+.pill-green { background:rgba(122,158,142,.3); color:#A8C4B8; }
+.pill-amber { background:rgba(212,168,67,.3); color:var(--amber); }
+
+/* SCROLL */
+.scroll-area { padding:20px 16px; flex:1; }
+.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.sec-title { font-family:'Gilda Display',serif; font-size:18px; color:var(--ink); }
+.sec-link { font-size:11px; color:var(--terra); font-weight:700; cursor:pointer; background:none; border:none; }
+
+/* AREAS SCROLL */
+.areas-row { display:flex; gap:10px; overflow-x:auto; margin:0 -16px; padding:0 16px 8px; scrollbar-width:none; margin-bottom:24px; }
+.areas-row::-webkit-scrollbar { display:none; }
+.area-card {
+  flex-shrink:0; width:110px;
+  background:var(--white); border:1px solid var(--sand);
+  border-radius:16px; padding:14px 12px;
+  cursor:pointer;
+}
+.area-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:10px; }
+.area-name { font-size:10px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.area-bar { height:4px; background:var(--sand); border-radius:99px; overflow:hidden; margin-bottom:4px; }
+.area-bar-fill { height:100%; border-radius:99px; }
+.area-pct { font-size:11px; font-weight:700; color:var(--navy2); }
+
+/* HITO ITEMS */
+.hito-item {
+  display:flex; align-items:center; gap:12px;
+  background:var(--white); border:1px solid var(--sand);
+  border-radius:14px; padding:13px 14px;
+  margin-bottom:8px; cursor:pointer;
+}
+.hito-dot { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.hito-body { flex:1; min-width:0; }
+.hito-name { font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hito-meta { display:flex; align-items:center; gap:6px; margin-top:3px; }
+.hito-tag { font-size:10px; color:var(--muted); }
+.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.s-logrado { background:#D8EDE6; color:#5A9080; }
+.s-progreso { background:#F5E8C0; color:#A07020; }
+.s-pendiente { background:var(--sand); color:var(--muted); }
+.hito-edad { font-size:11px; color:var(--muted); flex-shrink:0; }
+
+/* QUICK ACTIONS */
+.qa-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
+.qa-btn {
+  background:var(--white); border:1px solid var(--sand);
+  border-radius:14px; padding:14px 12px;
+  display:flex; align-items:center; gap:10px;
+  cursor:pointer;
+}
+.qa-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.qa-label { font-size:12px; font-weight:700; color:var(--navy2); line-height:1.3; }
+.qa-sub { font-size:10px; color:var(--muted); margin-top:1px; }
+
+/* ── ÁREAS SCREEN ── */
+.page-header {
+  background:var(--white);
+  padding:52px 20px 16px;
+  border-bottom:1px solid var(--sand);
+  flex-shrink:0;
+}
+.page-title { font-family:'Gilda Display',serif; font-size:24px; color:var(--ink); }
+.page-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+
+.big-area-card {
+  border-radius:18px; padding:20px;
+  margin-bottom:12px; position:relative; overflow:hidden;
+  cursor:pointer;
+}
+.big-area-card::before {
+  content:''; position:absolute; top:-20px; right:-20px;
+  width:100px; height:100px; border-radius:50%;
+  background:rgba(255,255,255,.15);
+}
+.bac-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.bac-left { display:flex; align-items:center; gap:10px; }
+.bac-icon { width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.bac-name { font-family:'Gilda Display',serif; font-size:17px; color:#fff; }
+.bac-count { font-size:11px; color:rgba(255,255,255,.65); margin-top:1px; }
+.bac-pct { font-family:'Gilda Display',serif; font-size:28px; color:#fff; }
+.bac-bar { height:6px; background:rgba(255,255,255,.2); border-radius:99px; overflow:hidden; }
+.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; }
+.bac-edad { display:inline-flex; align-items:center; gap:4px; margin-top:10px; font-size:11px; color:rgba(255,255,255,.7); background:rgba(255,255,255,.15); padding:3px 10px; border-radius:20px; }
+
+/* ── HITOS SCREEN ── */
+.filter-row { display:flex; gap:8px; overflow-x:auto; padding:12px 16px; scrollbar-width:none; }
+.filter-row::-webkit-scrollbar { display:none; }
+.filter-btn { flex-shrink:0; padding:6px 14px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; }
+.filter-btn.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* ── DIARIO SCREEN ── */
+.diario-form { padding:20px 16px; }
+.form-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:16px; margin-bottom:14px; }
+.form-card-title { font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.form-row { margin-bottom:12px; }
+.form-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; display:block; }
+.form-options { display:flex; gap:6px; flex-wrap:wrap; }
+.form-option {
+  padding:7px 14px; border-radius:20px;
+  border:1.5px solid var(--sand); background:var(--white);
+  font-family:'Nunito',sans-serif; font-size:12px; font-weight:600;
+  color:var(--ink); cursor:pointer;
+}
+.form-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
+.form-input {
+  width:100%; padding:10px 14px; border:1.5px solid var(--sand);
+  border-radius:10px; font-family:'Nunito',sans-serif; font-size:13px;
+  color:var(--ink); background:var(--cream); outline:none;
+}
+.form-input:focus { border-color:var(--terra); }
+.btn-save {
+  width:100%; padding:14px; border-radius:12px;
+  background:var(--terra); border:none; color:#fff;
+  font-family:'Nunito',sans-serif; font-size:15px; font-weight:700;
+  cursor:pointer; margin-top:8px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.hero { animation: fadeUp .4s ease both; }
+.area-card { animation: fadeUp .3s ease both; }
+.area-card:nth-child(1){animation-delay:.05s}
+.area-card:nth-child(2){animation-delay:.1s}
+.area-card:nth-child(3){animation-delay:.15s}
+.area-card:nth-child(4){animation-delay:.2s}
+.area-card:nth-child(5){animation-delay:.25s}
+.hito-item { animation: fadeUp .3s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ SCREEN: INICIO ══════════ -->
+<div class="screen active" id="screen-inicio">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-greeting">Buenos días ☀️</div>
+        <div class="hero-name">Hola, Bruno</div>
+      </div>
+      <div class="hero-avatar">🐻</div>
+    </div>
+    <div class="hero-card">
+      <div class="ring-wrap">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle class="ring-bg" cx="28" cy="28" r="22"/>
+          <circle class="ring-fill" cx="28" cy="28" r="22"/>
+        </svg>
+        <div class="ring-center">70%</div>
+      </div>
+      <div class="hero-info">
+        <h3>Progreso Global</h3>
+        <p>3 de 4 hitos logrados</p>
+        <div class="hero-pills">
+          <span class="pill pill-green">✓ 3 logrados</span>
+          <span class="pill pill-amber">⟳ 1 en curso</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-area">
+    <div class="sec-header">
+      <div class="sec-title">Áreas</div>
+      <button class="sec-link" onclick="goTo('areas')">Ver todas →</button>
+    </div>
+    <div class="areas-row">
+      <div class="area-card" onclick="goTo('areas')">
+        <div class="area-icon" style="background:#FDF0EA">💬</div>
+        <div class="area-name">Lenguaje</div>
+        <div class="area-bar"><div class="area-bar-fill" style="width:67%;background:#C4714A"></div></div>
+        <div class="area-pct">67%</div>
+      </div>
+      <div class="area-card" onclick="goTo('areas')">
+        <div class="area-icon" style="background:#E6F2EE">🤸</div>
+        <div class="area-name">Mot. Gruesa</div>
+        <div class="area-bar"><div class="area-bar-fill" style="width:100%;background:#7A9E8E"></div></div>
+        <div class="area-pct">100%</div>
+      </div>
+      <div class="area-card" onclick="goTo('areas')">
+        <div class="area-icon" style="background:#FDF5E0">✋</div>
+        <div class="area-name">Mot. Fina</div>
+        <div class="area-bar"><div class="area-bar-fill" style="width:60%;background:#D4A843"></div></div>
+        <div class="area-pct">60%</div>
+      </div>
+      <div class="area-card" onclick="goTo('areas')">
+        <div class="area-icon" style="background:#EAF0F5">👥</div>
+        <div class="area-name">Social</div>
+        <div class="area-bar"><div class="area-bar-fill" style="width:75%;background:#4A5D72"></div></div>
+        <div class="area-pct">75%</div>
+      </div>
+      <div class="area-card" onclick="goTo('areas')">
+        <div class="area-icon" style="background:#F2EEF8">🧩</div>
+        <div class="area-name">Cognitivo</div>
+        <div class="area-bar"><div class="area-bar-fill" style="width:50%;background:#9B7FBE"></div></div>
+        <div class="area-pct">50%</div>
+      </div>
+    </div>
+
+    <div class="sec-header">
+      <div class="sec-title">Acciones</div>
+    </div>
+    <div class="qa-grid">
+      <div class="qa-btn" onclick="goTo('diario')">
+        <div class="qa-icon" style="background:#FDF0EA">📝</div>
+        <div><div class="qa-label">Diario</div><div class="qa-sub">Registrar hoy</div></div>
+      </div>
+      <div class="qa-btn" onclick="goTo('hitos')">
+        <div class="qa-icon" style="background:#E6F2EE">🎯</div>
+        <div><div class="qa-label">Hitos</div><div class="qa-sub">Marcar logro</div></div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon" style="background:#FDF5E0">😊</div>
+        <div><div class="qa-label">Emoción</div><div class="qa-sub">Cómo está hoy</div></div>
+      </div>
+      <div class="qa-btn">
+        <div class="qa-icon" style="background:#EAF0F5">🔍</div>
+        <div><div class="qa-label">Observación</div><div class="qa-sub">Anotar algo</div></div>
+      </div>
+    </div>
+
+    <div class="sec-header">
+      <div class="sec-title">Últimos Hitos</div>
+      <button class="sec-link" onclick="goTo('hitos')">Ver todos →</button>
+    </div>
+
+    <div class="hito-item">
+      <div class="hito-dot" style="background:#E6F2EE">🤸</div>
+      <div class="hito-body">
+        <div class="hito-name">Camina solo</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Gruesa</span></div>
+      </div>
+      <div class="hito-edad">18m</div>
+    </div>
+    <div class="hito-item">
+      <div class="hito-dot" style="background:#FDF0EA">💬</div>
+      <div class="hito-body">
+        <div class="hito-name">Dice 10–50 palabras</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Lenguaje</span></div>
+      </div>
+      <div class="hito-edad">24m</div>
+    </div>
+    <div class="hito-item">
+      <div class="hito-dot" style="background:#FDF5E0">✋</div>
+      <div class="hito-body">
+        <div class="hito-name">Agarra con pinza</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Fina</span></div>
+      </div>
+      <div class="hito-edad">12m</div>
+    </div>
+    <div class="hito-item">
+      <div class="hito-dot" style="background:#FDF0EA">💬</div>
+      <div class="hito-body">
+        <div class="hito-name">Habla en frases completas</div>
+        <div class="hito-meta"><span class="status s-progreso">⟳ En progreso</span><span class="hito-tag">Lenguaje</span></div>
+      </div>
+      <div class="hito-edad">48m</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: ÁREAS ══════════ -->
+<div class="screen" id="screen-areas">
+  <div class="page-header">
+    <div class="page-title">Áreas de Desarrollo</div>
+    <div class="page-sub">5 áreas · Edad madurativa est. 18m</div>
+  </div>
+  <div class="scroll-area">
+    <div class="big-area-card" style="background:linear-gradient(135deg,#C4714A,#E8957A)">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">💬</div>
+          <div><div class="bac-name">Lenguaje</div><div class="bac-count">2 de 3 hitos</div></div>
+        </div>
+        <div class="bac-pct">67%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:67%"></div></div>
+      <div class="bac-edad">🧠 Edad mad. estimada: 61 meses</div>
+    </div>
+    <div class="big-area-card" style="background:linear-gradient(135deg,#5A8A7A,#7A9E8E)">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">🤸</div>
+          <div><div class="bac-name">Mot. Gruesa</div><div class="bac-count">1 de 1 hitos</div></div>
+        </div>
+        <div class="bac-pct">100%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:100%"></div></div>
+      <div class="bac-edad">🧠 Edad mad. estimada: 18 meses</div>
+    </div>
+    <div class="big-area-card" style="background:linear-gradient(135deg,#C49030,#D4A843)">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">✋</div>
+          <div><div class="bac-name">Mot. Fina</div><div class="bac-count">1 de 1 hitos</div></div>
+        </div>
+        <div class="bac-pct">100%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:100%"></div></div>
+      <div class="bac-edad">🧠 Edad mad. estimada: 12 meses</div>
+    </div>
+    <div class="big-area-card" style="background:linear-gradient(135deg,#3A4D62,#4A5D72)">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">👥</div>
+          <div><div class="bac-name">Social</div><div class="bac-count">0 de 2 hitos</div></div>
+        </div>
+        <div class="bac-pct">0%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:0%"></div></div>
+      <div class="bac-edad">🧠 Sin hitos logrados aún</div>
+    </div>
+    <div class="big-area-card" style="background:linear-gradient(135deg,#7A62A0,#9B7FBE)">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">🧩</div>
+          <div><div class="bac-name">Cognitivo</div><div class="bac-count">0 de 2 hitos</div></div>
+        </div>
+        <div class="bac-pct">0%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:0%"></div></div>
+      <div class="bac-edad">🧠 Sin hitos logrados aún</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: HITOS ══════════ -->
+<div class="screen" id="screen-hitos">
+  <div class="page-header">
+    <div class="page-title">Hitos de Bruno</div>
+    <div class="page-sub">95 hitos · 3 logrados</div>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterHitos(this,'todos')">Todos</button>
+    <button class="filter-btn" onclick="filterHitos(this,'logrado')">✓ Logrados</button>
+    <button class="filter-btn" onclick="filterHitos(this,'progreso')">⟳ En progreso</button>
+    <button class="filter-btn" onclick="filterHitos(this,'pendiente')">· Pendientes</button>
+  </div>
+  <div class="scroll-area" style="padding-top:8px" id="hitos-list">
+    <div class="hito-item" data-estado="logrado">
+      <div class="hito-dot" style="background:#E6F2EE">🤸</div>
+      <div class="hito-body">
+        <div class="hito-name">Camina solo</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Gruesa · 12–18m</span></div>
+      </div>
+      <div class="hito-edad">18m</div>
+    </div>
+    <div class="hito-item" data-estado="logrado">
+      <div class="hito-dot" style="background:#FDF0EA">💬</div>
+      <div class="hito-body">
+        <div class="hito-name">Dice 10–50 palabras</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Lenguaje · 18–24m</span></div>
+      </div>
+      <div class="hito-edad">61m</div>
+    </div>
+    <div class="hito-item" data-estado="logrado">
+      <div class="hito-dot" style="background:#FDF5E0">✋</div>
+      <div class="hito-body">
+        <div class="hito-name">Agarra con pinza</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Fina · 6–12m</span></div>
+      </div>
+      <div class="hito-edad">12m</div>
+    </div>
+    <div class="hito-item" data-estado="progreso">
+      <div class="hito-dot" style="background:#FDF0EA">💬</div>
+      <div class="hito-body">
+        <div class="hito-name">Habla en frases completas</div>
+        <div class="hito-meta"><span class="status s-progreso">⟳ En progreso</span><span class="hito-tag">Lenguaje · 3–4 años</span></div>
+      </div>
+      <div class="hito-edad">92m</div>
+    </div>
+    <div class="hito-item" data-estado="pendiente">
+      <div class="hito-dot" style="background:#EAF0F5">👥</div>
+      <div class="hito-body">
+        <div class="hito-name">Juega "cucú"</div>
+        <div class="hito-meta"><span class="status s-pendiente">· Pendiente</span><span class="hito-tag">Social · 6–12m</span></div>
+      </div>
+      <div class="hito-edad">—</div>
+    </div>
+    <div class="hito-item" data-estado="pendiente">
+      <div class="hito-dot" style="background:#F2EEF8">🧩</div>
+      <div class="hito-body">
+        <div class="hito-name">Busca objetos que desaparecen</div>
+        <div class="hito-meta"><span class="status s-pendiente">· Pendiente</span><span class="hito-tag">Cognitivo · 6–12m</span></div>
+      </div>
+      <div class="hito-edad">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN: DIARIO ══════════ -->
+<div class="screen" id="screen-diario">
+  <div class="page-header">
+    <div class="page-title">Diario de Hoy</div>
+    <div class="page-sub" id="fecha-hoy"></div>
+  </div>
+  <div class="diario-form">
+    <div class="form-card">
+      <div class="form-card-title">😴 Sueño</div>
+      <div class="form-row">
+        <label class="form-label">Calidad del sueño</label>
+        <div class="form-options">
+          <div class="form-option" onclick="select(this)">Bien</div>
+          <div class="form-option" onclick="select(this)">Regular</div>
+          <div class="form-option" onclick="select(this)">Malo</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Levantada nocturna</label>
+        <div class="form-options">
+          <div class="form-option" onclick="select(this)">Sí</div>
+          <div class="form-option" onclick="select(this)">No</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Horas de sueño</label>
+        <input class="form-input" type="number" placeholder="ej. 8" style="width:100px">
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">🍽️ Alimentación</div>
+      <div class="form-row">
+        <label class="form-label">Horario comida</label>
+        <div class="form-options">
+          <div class="form-option" onclick="select(this)">Desayuno</div>
+          <div class="form-option" onclick="select(this)">Almuerzo</div>
+          <div class="form-option" onclick="select(this)">Merienda</div>
+          <div class="form-option" onclick="select(this)">Snacks</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Menú consumido</label>
+        <input class="form-input" type="text" placeholder="¿Qué comió hoy?">
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">🏫 Escuela y Terapias</div>
+      <div class="form-row">
+        <label class="form-label">Estado en escuela</label>
+        <div class="form-options">
+          <div class="form-option" onclick="select(this)">Bien</div>
+          <div class="form-option" onclick="select(this)">Regular</div>
+          <div class="form-option" onclick="select(this)">Difícil</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Terapias hoy</label>
+        <div class="form-options">
+          <div class="form-option" onclick="select(this)">Sí</div>
+          <div class="form-option" onclick="select(this)">No</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">✨ Logro del día</div>
+      <div class="form-row">
+        <input class="form-input" type="text" placeholder="¿Algo especial que hizo hoy?">
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">📝 Notas generales</div>
+      <textarea class="form-input" rows="3" placeholder="Observaciones, cambios, notas médicas..."></textarea>
+    </div>
+
+    <button class="btn-save">💾 Guardar registro del día</button>
+  </div>
+</div>
+
+<!-- ══════════ BOTTOM NAV ══════════ -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-inicio" onclick="goTo('inicio')">
+    <div class="nav-btn-icon">🏠</div>
+    <div class="nav-btn-label">Inicio</div>
+    <div class="nav-btn-dot"></div>
+  </button>
+  <button class="nav-btn" id="nav-areas" onclick="goTo('areas')">
+    <div class="nav-btn-icon">🌱</div>
+    <div class="nav-btn-label">Áreas</div>
+  </button>
+  <button class="nav-btn" id="nav-hitos" onclick="goTo('hitos')">
+    <div class="nav-btn-icon">🎯</div>
+    <div class="nav-btn-label">Hitos</div>
+  </button>
+  <button class="nav-btn" id="nav-diario" onclick="goTo('diario')">
+    <div class="nav-btn-icon">📋</div>
+    <div class="nav-btn-label">Diario</div>
+  </button>
+</nav>
+
+<script>
+const screens = ['inicio','areas','hitos','diario'];
+
+function goTo(id) {
+  screens.forEach(s => {
+    document.getElementById('screen-'+s).classList.remove('active');
+    const nb = document.getElementById('nav-'+s);
+    if(nb) {
+      nb.classList.remove('active');
+      const dot = nb.querySelector('.nav-btn-dot');
+      if(dot) dot.style.display = 'none';
+    }
+  });
+  document.getElementById('screen-'+id).classList.add('active');
+  const nb = document.getElementById('nav-'+id);
+  if(nb) {
+    nb.classList.add('active');
+    let dot = nb.querySelector('.nav-btn-dot');
+    if(!dot) { dot = document.createElement('div'); dot.className='nav-btn-dot'; nb.appendChild(dot); }
+    dot.style.display = 'block';
+  }
+  window.scrollTo(0,0);
+}
+
+function select(el) {
+  const siblings = el.parentElement.querySelectorAll('.form-option');
+  siblings.forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function filterHitos(btn, estado) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#hitos-list .hito-item').forEach(item => {
+    if(estado === 'todos' || item.dataset.estado === estado) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Fecha hoy
+const hoy = new Date();
+const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+document.getElementById('fecha-hoy').textContent = hoy.toLocaleDateString('es-EC', opciones);
+
+// Init dots
+document.querySelectorAll('.nav-btn-dot').forEach((d,i) => { if(i>0) d.style.display='none'; });
+</script>
+</body>
+</html>
