@@ -211,7 +211,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
     </div>
     <nav class="sidebar-nav">
       <button class="nav-item active" id="snav-inicio" onclick="goTo('inicio')"><div class="nav-item-icon">🏠</div><div class="nav-item-label">Inicio</div></button>
-      <button class="nav-item" id="snav-areas" onclick="goTo('areas')"><div class="nav-item-icon">🌱</div><div class="nav-item-label">Áreas</div></button>
+      <button class="nav-item" id="snav-areas" onclick="goTo('areas')"><div class="nav-item-icon">🌱</div><div class="nav-item-label">Avances</div></button>
       <button class="nav-item" id="snav-hitos" onclick="goTo('hitos')"><div class="nav-item-icon">🎯</div><div class="nav-item-label">Hitos</div></button>
       <button class="nav-item" id="snav-diario" onclick="goTo('diario')"><div class="nav-item-icon">📋</div><div class="nav-item-label">Diario</div></button>
       <button class="nav-item" id="snav-config" onclick="goTo('config')"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">Configuración</div></button>
@@ -252,7 +252,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         </div>
       </div>
       <div class="content">
-        <div class="sec-header"><div class="sec-title">Áreas</div><button class="sec-link" onclick="goTo('areas')">Ver todas →</button></div>
+        <div class="sec-header"><div class="sec-title">Avances por Área</div><button class="sec-link" onclick="goTo('areas')">Ver todas →</button></div>
         <div class="areas-grid" id="inicio-areas"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
         <div class="sec-header"><div class="sec-title">Acciones rápidas</div></div>
         <div class="qa-grid">
@@ -268,7 +268,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 
     <!-- ÁREAS -->
     <div class="screen" id="screen-areas">
-      <div class="page-header"><div class="page-title">Áreas de Desarrollo</div><div class="page-sub" id="areas-sub">Cargando...</div></div>
+      <div class="page-header"><div class="page-title">Avances de Áreas de Desarrollo</div><div class="page-sub" id="areas-sub">Cargando...</div></div>
       <div class="content"><div class="big-areas-grid" id="areas-grid"><div class="loading"><div class="spinner"></div> Cargando...</div></div></div>
     </div>
 
@@ -420,7 +420,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 
 <nav class="mobile-nav">
   <button class="mnav-btn active" id="mnav-inicio" onclick="goTo('inicio')"><div class="mnav-icon">🏠</div><div class="mnav-label">Inicio</div><div class="mnav-dot"></div></button>
-  <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Áreas</div></button>
+  <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Avances</div></button>
   <button class="mnav-btn" id="mnav-hitos" onclick="goTo('hitos')"><div class="mnav-icon">🎯</div><div class="mnav-label">Hitos</div></button>
   <button class="mnav-btn" id="mnav-diario" onclick="goTo('diario')"><div class="mnav-icon">📋</div><div class="mnav-label">Diario</div></button>
   <button class="mnav-btn" id="mnav-config" onclick="goTo('config')"><div class="mnav-icon">⚙️</div><div class="mnav-label">Config</div></button>
@@ -844,6 +844,7 @@ function guardarNombre() {
   if (!nombre) { showToast('Escribe un nombre primero'); return; }
   localStorage.setItem('bruno-nombre', nombre);
   aplicarNombre(nombre);
+  updateCell('Perfil!H2', nombre).catch(()=>{});
   showToast('✅ Nombre actualizado: ' + nombre);
 }
 
@@ -857,7 +858,19 @@ function aplicarNombre(nombre) {
   document.title = nombre.toUpperCase();
 }
 
-function cargarNombreGuardado() {
+async function cargarNombreGuardado() {
+  try {
+    const rows = await fetchSheet('Perfil!H2');
+    if (rows && rows[0] && rows[0][0]) {
+      const nombre = rows[0][0];
+      aplicarNombre(nombre);
+      localStorage.setItem('bruno-nombre', nombre);
+      const input = document.getElementById('input-nombre');
+      if (input) input.value = nombre;
+      return;
+    }
+  } catch(e) {}
+  // Fallback localStorage
   const nombre = localStorage.getItem('bruno-nombre');
   if (nombre) {
     aplicarNombre(nombre);
@@ -1107,17 +1120,17 @@ function generarPDF() {
 </body>
 </html>`;
 
-  const blob = new Blob([html], { type: 'text/html' });
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
-  const win = window.open(url, '_blank');
-  if (!win) {
-    // Si no se abre popup, descargar directamente
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Informe_${nombre}_${new Date().toLocaleDateString('es-EC').replace(/\//g,'-')}.html`;
-    a.click();
-  }
-  showToast('✅ Informe generado — usa Ctrl+P para guardar como PDF');
+  const nombreArchivo = `Informe_${nombre}_${new Date().toLocaleDateString('es-EC').replace(/\//g,'-')}.html`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nombreArchivo;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('✅ Informe descargado — ábrelo y usa Imprimir → Guardar como PDF');
 }
 
 // ═══════════════════════════════════════
@@ -1185,11 +1198,52 @@ function guardarColores() {
   try {
     const s = getComputedStyle(document.documentElement);
     const c = ['terra','terra2','navy','navy2','cream','sand'].reduce((o,k) => { o[k]=s.getPropertyValue('--'+k).trim(); return o; }, {});
-    localStorage.setItem('bruno-colores', JSON.stringify(c));
+    const json = JSON.stringify(c);
+    localStorage.setItem('bruno-colores', json);
+    // Guardar también en Sheets columna F del Perfil
+    updateCell('Perfil!F2', json).catch(()=>{});
   } catch(e) {}
 }
 
-function cargarColoresGuardados() {
+function setModo(modo) {
+  if (modo === 'oscuro') {
+    document.documentElement.style.setProperty('--cream', '#1A1A2E');
+    document.documentElement.style.setProperty('--sand', '#2C2C4A');
+    document.documentElement.style.setProperty('--white', '#242438');
+    document.documentElement.style.setProperty('--ink', '#E8E0F0');
+    document.documentElement.style.setProperty('--muted', '#8A8AAB');
+    document.body.style.background = '#0D0D1A';
+  } else {
+    document.documentElement.style.setProperty('--cream', '#F7F3EE');
+    document.documentElement.style.setProperty('--sand', '#EDE8E2');
+    document.documentElement.style.setProperty('--white', '#ffffff');
+    document.documentElement.style.setProperty('--ink', '#1E2A35');
+    document.documentElement.style.setProperty('--muted', '#8A9AAB');
+    document.body.style.background = '#D8D2CA';
+  }
+  localStorage.setItem('bruno-modo', modo);
+  updateCell('Perfil!G2', modo).catch(()=>{});
+  showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
+}
+
+async function cargarColoresGuardados() {
+  try {
+    // Intentar cargar desde Sheets primero
+    const rows = await fetchSheet('Perfil!F2:G2');
+    if (rows && rows[0]) {
+      if (rows[0][0]) {
+        const c = JSON.parse(rows[0][0]);
+        Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+        localStorage.setItem('bruno-colores', rows[0][0]);
+      }
+      if (rows[0][1]) {
+        setModo(rows[0][1]);
+        localStorage.setItem('bruno-modo', rows[0][1]);
+        return;
+      }
+    }
+  } catch(e) {}
+  // Fallback a localStorage
   try {
     const c = JSON.parse(localStorage.getItem('bruno-colores'));
     if (c) Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
@@ -1197,7 +1251,6 @@ function cargarColoresGuardados() {
     if (modo) setModo(modo);
   } catch(e) {}
 }
-
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
