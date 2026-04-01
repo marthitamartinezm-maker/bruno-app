@@ -173,7 +173,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 <body>
 
 <!-- INPUT FOTO OCULTO -->
-<input type="file" id="input-foto" accept="image/*" style="display:none" onchange="cargarFoto(this)">
+<input type="file" id="input-foto" accept="image/png,image/jpeg,image/gif,image/webp" style="display:none;position:fixed;top:-100px" onchange="cargarFoto(this)">
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -218,7 +218,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
     </nav>
     <div class="sidebar-footer">
       <div class="bruno-chip">
-        <div class="bruno-avatar" onclick="document.getElementById('input-foto').click()" title="Toca para cambiar foto">
+        <div class="bruno-avatar" onclick="abrirSelectorFoto()" title="Toca para cambiar foto">
           <span id="sidebar-avatar-emoji">🐻</span>
         </div>
         <div><div class="bruno-name" id="sidebar-nombre">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Cargando...</div></div>
@@ -232,7 +232,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
       <div class="hero">
         <div class="hero-top">
           <div><div class="hero-greeting" id="hero-saludo">Buenos días ☀️</div><div class="hero-name">Hola, <span id="hero-nombre">Bruno</span></div></div>
-          <div class="hero-avatar" onclick="document.getElementById('input-foto').click()" title="Toca para cambiar foto">
+          <div class="hero-avatar" onclick="abrirSelectorFoto()" title="Toca para cambiar foto">
             <span id="hero-avatar-emoji">🐻</span>
           </div>
         </div>
@@ -333,11 +333,11 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
           <div class="form-card-title">📸 Foto y Avatar</div>
           <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Sube una foto o elige un animalito como avatar.</p>
           <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
-            <div id="config-avatar-wrap" onclick="document.getElementById('input-foto').click()" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--amber));display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;overflow:hidden;border:3px solid var(--sand);">
+            <div id="config-avatar-wrap" onclick="abrirSelectorFoto()" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--amber));display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;overflow:hidden;border:3px solid var(--sand);">
               <span id="config-avatar-emoji">🐻</span>
             </div>
             <div>
-              <button onclick="document.getElementById('input-foto').click()" style="padding:10px 20px;border-radius:10px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:block;margin-bottom:8px;">📷 Subir foto</button>
+              <button onclick="abrirSelectorFoto()" style="padding:10px 20px;border-radius:10px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:block;margin-bottom:8px;">📷 Subir foto</button>
               <button onclick="borrarFoto()" style="padding:8px 16px;border-radius:10px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;">🗑 Quitar foto</button>
             </div>
           </div>
@@ -826,7 +826,11 @@ function filterHitos(btn, estado) {
   renderHitosList(estado);
 }
 
-function actualizarSaludo() {
+function abrirSelectorFoto() {
+  const input = document.getElementById('input-foto');
+  input.value = '';
+  input.click();
+}
   const hora = new Date().getHours();
   let saludo;
   if (hora >= 5 && hora < 12) saludo = 'Buenos días ☀️';
@@ -1200,8 +1204,10 @@ function guardarColores() {
     const c = ['terra','terra2','navy','navy2','cream','sand'].reduce((o,k) => { o[k]=s.getPropertyValue('--'+k).trim(); return o; }, {});
     const json = JSON.stringify(c);
     localStorage.setItem('bruno-colores', json);
-    // Guardar también en Sheets columna F del Perfil
-    updateCell('Perfil!F2', json).catch(()=>{});
+    // Guardar en cookie con expiración de 1 año
+    const exp = new Date();
+    exp.setFullYear(exp.getFullYear() + 1);
+    document.cookie = `bruno-colores=${encodeURIComponent(json)};expires=${exp.toUTCString()};path=/`;
   } catch(e) {}
 }
 
@@ -1222,33 +1228,40 @@ function setModo(modo) {
     document.body.style.background = '#D8D2CA';
   }
   localStorage.setItem('bruno-modo', modo);
-  updateCell('Perfil!G2', modo).catch(()=>{});
+  const exp = new Date();
+  exp.setFullYear(exp.getFullYear() + 1);
+  document.cookie = `bruno-modo=${modo};expires=${exp.toUTCString()};path=/`;
   showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
+}
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
 }
 
 async function cargarColoresGuardados() {
   try {
-    // Intentar cargar desde Sheets primero
-    const rows = await fetchSheet('Perfil!F2:G2');
-    if (rows && rows[0]) {
-      if (rows[0][0]) {
-        const c = JSON.parse(rows[0][0]);
-        Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-        localStorage.setItem('bruno-colores', rows[0][0]);
-      }
-      if (rows[0][1]) {
-        setModo(rows[0][1]);
-        localStorage.setItem('bruno-modo', rows[0][1]);
-        return;
-      }
+    // Intentar cookie primero (más persistente)
+    const cookieColores = getCookie('bruno-colores');
+    const cookieModo = getCookie('bruno-modo');
+    if (cookieColores) {
+      const c = JSON.parse(cookieColores);
+      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+      try {
+        document.getElementById('color-terra').value = c.terra || '#C4714A';
+        document.getElementById('color-navy').value = c.navy || '#1E2A35';
+        document.getElementById('color-cream').value = c.cream || '#F7F3EE';
+      } catch(e) {}
     }
-  } catch(e) {}
-  // Fallback a localStorage
-  try {
-    const c = JSON.parse(localStorage.getItem('bruno-colores'));
-    if (c) Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-    const modo = localStorage.getItem('bruno-modo');
-    if (modo) setModo(modo);
+    if (cookieModo) { setModo(cookieModo); return; }
+    // Fallback localStorage
+    const lsColores = localStorage.getItem('bruno-colores');
+    if (lsColores) {
+      const c = JSON.parse(lsColores);
+      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+    }
+    const lsModo = localStorage.getItem('bruno-modo');
+    if (lsModo) setModo(lsModo);
   } catch(e) {}
 }
 // ═══════════════════════════════════════
