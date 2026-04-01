@@ -206,7 +206,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-title">BRUNO</div>
+      <div class="sidebar-logo-title" id="sidebar-app-nombre">BRUNO</div>
       <div class="sidebar-logo-sub">App de Desarrollo</div>
     </div>
     <nav class="sidebar-nav">
@@ -221,7 +221,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         <div class="bruno-avatar" onclick="document.getElementById('input-foto').click()" title="Toca para cambiar foto">
           <span id="sidebar-avatar-emoji">🐻</span>
         </div>
-        <div><div class="bruno-name">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Cargando...</div></div>
+        <div><div class="bruno-name" id="sidebar-nombre">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Cargando...</div></div>
       </div>
     </div>
   </aside>
@@ -231,7 +231,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
     <div class="screen active" id="screen-inicio">
       <div class="hero">
         <div class="hero-top">
-          <div><div class="hero-greeting">Buenos días ☀️</div><div class="hero-name">Hola, Bruno</div></div>
+          <div><div class="hero-greeting" id="hero-saludo">Buenos días ☀️</div><div class="hero-name">Hola, <span id="hero-nombre">Bruno</span></div></div>
           <div class="hero-avatar" onclick="document.getElementById('input-foto').click()" title="Toca para cambiar foto">
             <span id="hero-avatar-emoji">🐻</span>
           </div>
@@ -319,6 +319,15 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
     <div class="screen" id="screen-config">
       <div class="page-header"><div class="page-title">Configuración</div><div class="page-sub">Personaliza tu app BRUNO</div></div>
       <div class="content">
+
+        <div class="form-card" style="margin-bottom:14px">
+          <div class="form-card-title">✏️ Nombre del niño/a</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Cambia el nombre que aparece en la app.</p>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <input class="form-input" id="input-nombre" type="text" placeholder="Nombre del niño/a" style="max-width:240px;">
+            <button onclick="guardarNombre()" style="padding:10px 20px;border-radius:10px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Guardar nombre</button>
+          </div>
+        </div>
 
         <div class="form-card" style="margin-bottom:14px">
           <div class="form-card-title">📸 Foto y Avatar</div>
@@ -811,6 +820,46 @@ function filterHitos(btn, estado) {
   renderHitosList(estado);
 }
 
+function actualizarSaludo() {
+  const hora = new Date().getHours();
+  let saludo;
+  if (hora >= 5 && hora < 12) saludo = 'Buenos días ☀️';
+  else if (hora >= 12 && hora < 19) saludo = 'Buenas tardes 🌤️';
+  else saludo = 'Buenas noches 🌙';
+  const el = document.getElementById('hero-saludo');
+  if (el) el.textContent = saludo;
+}
+
+// ═══════════════════════════════════════
+// NOMBRE
+// ═══════════════════════════════════════
+function guardarNombre() {
+  const nombre = document.getElementById('input-nombre').value.trim();
+  if (!nombre) { showToast('Escribe un nombre primero'); return; }
+  localStorage.setItem('bruno-nombre', nombre);
+  aplicarNombre(nombre);
+  showToast('✅ Nombre actualizado: ' + nombre);
+}
+
+function aplicarNombre(nombre) {
+  const ids = ['hero-nombre','sidebar-nombre','sidebar-app-nombre'];
+  const valores = [nombre, nombre, nombre.toUpperCase()];
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = valores[i];
+  });
+  document.title = nombre.toUpperCase();
+}
+
+function cargarNombreGuardado() {
+  const nombre = localStorage.getItem('bruno-nombre');
+  if (nombre) {
+    aplicarNombre(nombre);
+    const input = document.getElementById('input-nombre');
+    if (input) input.value = nombre;
+  }
+}
+
 // ═══════════════════════════════════════
 // FOTO DE PERFIL
 // ═══════════════════════════════════════
@@ -953,9 +1002,10 @@ document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString
 document.querySelectorAll('.mnav-dot').forEach((d,i) => { if(i>0) d.style.display='none'; });
 
 cargarColoresGuardados();
+cargarNombreGuardado();
 cargarFotoGuardada();
+actualizarSaludo();
 cargarDatos();
 </script>
 </body>
 </html>
-
