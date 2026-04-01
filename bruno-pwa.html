@@ -209,6 +209,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
       <button class="nav-item" id="snav-areas" onclick="goTo('areas')"><div class="nav-item-icon">🌱</div><div class="nav-item-label">Áreas</div></button>
       <button class="nav-item" id="snav-hitos" onclick="goTo('hitos')"><div class="nav-item-icon">🎯</div><div class="nav-item-label">Hitos</div></button>
       <button class="nav-item" id="snav-diario" onclick="goTo('diario')"><div class="nav-item-icon">📋</div><div class="nav-item-label">Diario</div></button>
+      <button class="nav-item" id="snav-config" onclick="goTo('config')"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">Configuración</div></button>
     </nav>
     <div class="sidebar-footer">
       <div class="bruno-chip">
@@ -305,6 +306,62 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         <button class="btn-save" id="btn-guardar-diario" onclick="guardarDiario()">💾 Guardar registro del día</button>
       </div>
     </div>
+    <!-- CONFIGURACIÓN -->
+    <div class="screen" id="screen-config">
+      <div class="page-header"><div class="page-title">Configuración</div><div class="page-sub">Personaliza tu app BRUNO</div></div>
+      <div class="content">
+
+        <div class="form-card" style="margin-bottom:14px">
+          <div class="form-card-title">🎨 Color principal</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Elige el color de acento de la app — botones, links y detalles.</p>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <input type="color" id="color-terra" value="#C4714A" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('terra',this.value)">
+              <span style="font-size:11px;color:var(--muted);">Principal</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <input type="color" id="color-navy" value="#1E2A35" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('navy',this.value)">
+              <span style="font-size:11px;color:var(--muted);">Sidebar</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <input type="color" id="color-cream" value="#F7F3EE" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('cream',this.value)">
+              <span style="font-size:11px;color:var(--muted);">Fondo</span>
+            </div>
+          </div>
+          <div style="margin-top:20px;">
+            <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Paletas sugeridas</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="palette-btn" onclick="aplicarPaleta('terracota')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
+                <span style="width:14px;height:14px;border-radius:50%;background:#C4714A;display:inline-block"></span> Terracota
+              </button>
+              <button class="palette-btn" onclick="aplicarPaleta('oceano')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
+                <span style="width:14px;height:14px;border-radius:50%;background:#1A6B9A;display:inline-block"></span> Océano
+              </button>
+              <button class="palette-btn" onclick="aplicarPaleta('bosque')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
+                <span style="width:14px;height:14px;border-radius:50%;background:#2D6A4F;display:inline-block"></span> Bosque
+              </button>
+              <button class="palette-btn" onclick="aplicarPaleta('lavanda')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
+                <span style="width:14px;height:14px;border-radius:50%;background:#7B5EA7;display:inline-block"></span> Lavanda
+              </button>
+              <button class="palette-btn" onclick="aplicarPaleta('rosa')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
+                <span style="width:14px;height:14px;border-radius:50%;background:#C4547A;display:inline-block"></span> Rosa
+              </button>
+            </div>
+          </div>
+          <button onclick="resetColores()" style="margin-top:16px;padding:8px 16px;border-radius:10px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;">↺ Restaurar colores originales</button>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-title">🌓 Modo de visualización</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button onclick="setModo('claro')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">☀️ Claro</button>
+            <button onclick="setModo('oscuro')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🌙 Oscuro</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -313,6 +370,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
   <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Áreas</div></button>
   <button class="mnav-btn" id="mnav-hitos" onclick="goTo('hitos')"><div class="mnav-icon">🎯</div><div class="mnav-label">Hitos</div></button>
   <button class="mnav-btn" id="mnav-diario" onclick="goTo('diario')"><div class="mnav-icon">📋</div><div class="mnav-label">Diario</div></button>
+  <button class="mnav-btn" id="mnav-config" onclick="goTo('config')"><div class="mnav-icon">⚙️</div><div class="mnav-label">Config</div></button>
 </nav>
 
 <script>
@@ -691,7 +749,7 @@ async function guardarDiario() {
 // ═══════════════════════════════════════
 // NAVEGACIÓN
 // ═══════════════════════════════════════
-const SCREENS = ['inicio','areas','hitos','diario'];
+const SCREENS = ['inicio','areas','hitos','diario','config'];
 
 function goTo(id) {
   SCREENS.forEach(s => {
@@ -716,12 +774,92 @@ function filterHitos(btn, estado) {
 }
 
 // ═══════════════════════════════════════
+// COLORES Y TEMAS
+// ═══════════════════════════════════════
+const PALETAS = {
+  terracota: { terra:'#C4714A', terra2:'#E8957A', navy:'#1E2A35', navy2:'#2C3A4A', cream:'#F7F3EE', sand:'#EDE8E2' },
+  oceano:    { terra:'#1A6B9A', terra2:'#3A8FBF', navy:'#0D2B3E', navy2:'#1A4A6B', cream:'#EEF5FA', sand:'#D8E8F0' },
+  bosque:    { terra:'#2D6A4F', terra2:'#52B788', navy:'#1B3D2F', navy2:'#2D6A4F', cream:'#EEF5F0', sand:'#D8EDE2' },
+  lavanda:   { terra:'#7B5EA7', terra2:'#9B7FBE', navy:'#2D1B4E', navy2:'#4A2D7A', cream:'#F5F0FA', sand:'#E8E0F0' },
+  rosa:      { terra:'#C4547A', terra2:'#E87AA0', navy:'#3E1B2D', navy2:'#6B2D4A', cream:'#FAF0F4', sand:'#F0D8E4' },
+};
+
+function lightenColor(hex, amount) {
+  const num = parseInt(hex.replace('#',''), 16);
+  const r = Math.min(255, (num >> 16) + amount);
+  const g = Math.min(255, ((num >> 8) & 0xff) + amount);
+  const b = Math.min(255, (num & 0xff) + amount);
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6,'0');
+}
+
+function aplicarColor(variable, valor) {
+  document.documentElement.style.setProperty('--'+variable, valor);
+  if (variable === 'terra') document.documentElement.style.setProperty('--terra2', lightenColor(valor, 30));
+  if (variable === 'navy') document.documentElement.style.setProperty('--navy2', lightenColor(valor, 15));
+  guardarColores();
+}
+
+function aplicarPaleta(nombre) {
+  const p = PALETAS[nombre];
+  if (!p) return;
+  Object.entries(p).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+  try {
+    document.getElementById('color-terra').value = p.terra;
+    document.getElementById('color-navy').value = p.navy;
+    document.getElementById('color-cream').value = p.cream;
+  } catch(e) {}
+  guardarColores();
+  showToast('🎨 Tema: ' + nombre);
+}
+
+function resetColores() { aplicarPaleta('terracota'); showToast('↺ Colores restaurados'); }
+
+function setModo(modo) {
+  if (modo === 'oscuro') {
+    document.documentElement.style.setProperty('--cream', '#1A1A2E');
+    document.documentElement.style.setProperty('--sand', '#2C2C4A');
+    document.documentElement.style.setProperty('--white', '#242438');
+    document.documentElement.style.setProperty('--ink', '#E8E0F0');
+    document.documentElement.style.setProperty('--muted', '#8A8AAB');
+    document.body.style.background = '#0D0D1A';
+  } else {
+    document.documentElement.style.setProperty('--cream', '#F7F3EE');
+    document.documentElement.style.setProperty('--sand', '#EDE8E2');
+    document.documentElement.style.setProperty('--white', '#ffffff');
+    document.documentElement.style.setProperty('--ink', '#1E2A35');
+    document.documentElement.style.setProperty('--muted', '#8A9AAB');
+    document.body.style.background = '#D8D2CA';
+  }
+  localStorage.setItem('bruno-modo', modo);
+  showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
+}
+
+function guardarColores() {
+  try {
+    const s = getComputedStyle(document.documentElement);
+    const c = ['terra','terra2','navy','navy2','cream','sand'].reduce((o,k) => { o[k]=s.getPropertyValue('--'+k).trim(); return o; }, {});
+    localStorage.setItem('bruno-colores', JSON.stringify(c));
+  } catch(e) {}
+}
+
+function cargarColoresGuardados() {
+  try {
+    const c = JSON.parse(localStorage.getItem('bruno-colores'));
+    if (c) Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+    const modo = localStorage.getItem('bruno-modo');
+    if (modo) setModo(modo);
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
 document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-EC', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
 document.querySelectorAll('.mnav-dot').forEach((d,i) => { if(i>0) d.style.display='none'; });
 
+cargarColoresGuardados();
 cargarDatos();
 </script>
 </body>
 </html>
+
