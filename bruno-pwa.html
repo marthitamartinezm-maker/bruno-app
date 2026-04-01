@@ -49,7 +49,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .ring-wrap { position:relative; width:60px; height:60px; flex-shrink:0; }
 .ring-wrap svg { transform:rotate(-90deg); }
 .ring-bg { fill:none; stroke:rgba(255,255,255,.12); stroke-width:5; }
-.ring-fill { fill:none; stroke:var(--terra2); stroke-width:5; stroke-linecap:round; stroke-dasharray:138; stroke-dashoffset:41; }
+.ring-fill { fill:none; stroke:var(--terra2); stroke-width:5; stroke-linecap:round; stroke-dasharray:138; transition:stroke-dashoffset 1s ease; }
 .ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Gilda Display',serif; font-size:16px; color:#fff; }
 .hero-info h3 { font-size:14px; font-weight:700; color:#fff; }
 .hero-info p { font-size:12px; color:rgba(255,255,255,.5); margin-top:2px; }
@@ -67,7 +67,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .area-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:10px; }
 .area-name { font-size:10px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
 .area-bar { height:5px; background:var(--sand); border-radius:99px; overflow:hidden; margin-bottom:5px; }
-.area-bar-fill { height:100%; border-radius:99px; }
+.area-bar-fill { height:100%; border-radius:99px; transition:width .8s ease; }
 .area-pct { font-size:12px; font-weight:700; color:var(--navy2); }
 .qa-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:28px; }
 .qa-btn { background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:16px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:transform .15s; }
@@ -82,11 +82,11 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .hito-name { font-size:14px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .hito-meta { display:flex; align-items:center; gap:6px; margin-top:3px; flex-wrap:wrap; }
 .hito-tag { font-size:11px; color:var(--muted); }
-.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; cursor:pointer; }
 .s-logrado { background:#D8EDE6; color:#5A9080; }
 .s-progreso { background:#F5E8C0; color:#A07020; }
 .s-pendiente { background:var(--sand); color:var(--muted); }
-.hito-edad { font-size:12px; color:var(--muted); flex-shrink:0; }
+.hito-edad { font-size:12px; color:var(--muted); flex-shrink:0; white-space:nowrap; }
 .page-header { padding:32px 32px 0; margin-bottom:4px; }
 .page-title { font-family:'Gilda Display',serif; font-size:28px; color:var(--ink); }
 .page-sub { font-size:13px; color:var(--muted); margin-top:4px; }
@@ -101,11 +101,10 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .bac-count { font-size:11px; color:rgba(255,255,255,.65); margin-top:2px; }
 .bac-pct { font-family:'Gilda Display',serif; font-size:30px; color:#fff; }
 .bac-bar { height:6px; background:rgba(255,255,255,.2); border-radius:99px; overflow:hidden; }
-.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; }
+.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; transition:width .8s ease; }
 .bac-edad { display:inline-flex; align-items:center; gap:4px; margin-top:10px; font-size:11px; color:rgba(255,255,255,.7); background:rgba(255,255,255,.15); padding:3px 10px; border-radius:20px; }
 .filter-row { display:flex; gap:8px; flex-wrap:wrap; padding:16px 32px 0; }
 .filter-btn { padding:7px 16px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s; }
-.filter-btn:hover { border-color:var(--navy); color:var(--navy); }
 .filter-btn.active { background:var(--navy); border-color:var(--navy); color:#fff; }
 .diario-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
 .form-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:18px; }
@@ -114,13 +113,36 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .form-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:7px; display:block; }
 .form-options { display:flex; gap:6px; flex-wrap:wrap; }
 .form-option { padding:7px 14px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer; transition:all .15s; }
-.form-option:hover { border-color:var(--terra); color:var(--terra); }
 .form-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
 .form-input { width:100%; padding:10px 14px; border:1.5px solid var(--sand); border-radius:10px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink); background:var(--cream); outline:none; transition:border .15s; }
 .form-input:focus { border-color:var(--terra); }
 .btn-save { width:100%; padding:14px; border-radius:12px; background:var(--terra); border:none; color:#fff; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; transition:background .15s; }
 .btn-save:hover { background:#b5623e; }
+.btn-save:disabled { background:var(--muted); cursor:not-allowed; }
 .mobile-nav { display:none; }
+.loading { display:flex; align-items:center; justify-content:center; padding:40px; color:var(--muted); font-size:14px; gap:10px; }
+.spinner { width:20px; height:20px; border:2px solid var(--sand); border-top-color:var(--terra); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; opacity:0; transition:opacity .3s; pointer-events:none; }
+.toast.show { opacity:1; }
+.empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
+.empty-state-icon { font-size:40px; margin-bottom:12px; }
+.empty-state-text { font-size:14px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:20px; padding:24px; width:100%; max-width:400px; }
+.modal-title { font-family:'Gilda Display',serif; font-size:20px; color:var(--ink); margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
+.modal-options { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+.modal-option { padding:12px 16px; border-radius:12px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; text-align:left; transition:all .15s; display:flex; align-items:center; gap:10px; }
+.modal-option:hover { border-color:var(--terra); }
+.modal-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
+.modal-input { margin-bottom:12px; }
+.modal-btns { display:flex; gap:8px; }
+.btn-cancel { flex:1; padding:12px; border-radius:10px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer; }
+.btn-confirm { flex:1; padding:12px; border-radius:10px; border:none; background:var(--terra); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#fff; cursor:pointer; }
 
 @media (max-width:768px) {
   body { background:var(--cream); }
@@ -142,12 +164,40 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
   .big-areas-grid { grid-template-columns:1fr; }
   .diario-grid { grid-template-columns:1fr; }
 }
-
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 .hero,.area-card,.hito-item,.big-area-card,.form-card { animation:fadeUp .35s ease both; }
 </style>
 </head>
 <body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL HITO -->
+<div class="modal-overlay" id="modal-hito">
+  <div class="modal">
+    <div class="modal-title" id="modal-hito-nombre">Hito</div>
+    <div class="modal-sub" id="modal-hito-area">Área</div>
+    <div class="modal-options">
+      <button class="modal-option" onclick="selectEstado(this,'LOGRADO')">✅ Logrado</button>
+      <button class="modal-option" onclick="selectEstado(this,'EN PROGRESO')">⟳ En progreso</button>
+      <button class="modal-option" onclick="selectEstado(this,'PENDIENTE')">· Pendiente</button>
+    </div>
+    <div class="modal-input">
+      <label class="form-label">Edad cuando lo logró (meses) — opcional</label>
+      <input class="form-input" type="number" id="modal-edad" placeholder="ej. 18">
+    </div>
+    <div class="modal-input">
+      <label class="form-label">Notas — opcional</label>
+      <input class="form-input" type="text" id="modal-notas" placeholder="Observaciones...">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="guardarHito()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -163,7 +213,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
     <div class="sidebar-footer">
       <div class="bruno-chip">
         <div class="bruno-avatar">🐻</div>
-        <div><div class="bruno-name">Bruno</div><div class="bruno-sub">Edad mad. ~18 meses</div></div>
+        <div><div class="bruno-name">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Cargando...</div></div>
       </div>
     </div>
   </aside>
@@ -178,25 +228,22 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         </div>
         <div class="hero-card">
           <div class="ring-wrap">
-            <svg width="60" height="60" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="22"/><circle class="ring-fill" cx="30" cy="30" r="22"/></svg>
-            <div class="ring-center">70%</div>
+            <svg width="60" height="60" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="22"/><circle class="ring-fill" id="ring-fill" cx="30" cy="30" r="22" style="stroke-dashoffset:138"/></svg>
+            <div class="ring-center" id="ring-pct">0%</div>
           </div>
           <div class="hero-info">
             <h3>Progreso Global</h3>
-            <p>3 de 4 hitos logrados</p>
-            <div class="hero-pills"><span class="pill pill-green">✓ 3 logrados</span><span class="pill pill-amber">⟳ 1 en curso</span></div>
+            <p id="hero-progreso-sub">Cargando datos...</p>
+            <div class="hero-pills">
+              <span class="pill pill-green" id="pill-logrados">— logrados</span>
+              <span class="pill pill-amber" id="pill-progreso">— en curso</span>
+            </div>
           </div>
         </div>
       </div>
       <div class="content">
         <div class="sec-header"><div class="sec-title">Áreas</div><button class="sec-link" onclick="goTo('areas')">Ver todas →</button></div>
-        <div class="areas-grid">
-          <div class="area-card" onclick="goTo('areas')"><div class="area-icon" style="background:#FDF0EA">💬</div><div class="area-name">Lenguaje</div><div class="area-bar"><div class="area-bar-fill" style="width:67%;background:#C4714A"></div></div><div class="area-pct">67%</div></div>
-          <div class="area-card" onclick="goTo('areas')"><div class="area-icon" style="background:#E6F2EE">🤸</div><div class="area-name">Mot. Gruesa</div><div class="area-bar"><div class="area-bar-fill" style="width:100%;background:#7A9E8E"></div></div><div class="area-pct">100%</div></div>
-          <div class="area-card" onclick="goTo('areas')"><div class="area-icon" style="background:#FDF5E0">✋</div><div class="area-name">Mot. Fina</div><div class="area-bar"><div class="area-bar-fill" style="width:100%;background:#D4A843"></div></div><div class="area-pct">100%</div></div>
-          <div class="area-card" onclick="goTo('areas')"><div class="area-icon" style="background:#EAF0F5">👥</div><div class="area-name">Social</div><div class="area-bar"><div class="area-bar-fill" style="width:0%;background:#4A5D72"></div></div><div class="area-pct">0%</div></div>
-          <div class="area-card" onclick="goTo('areas')"><div class="area-icon" style="background:#F2EEF8">🧩</div><div class="area-name">Cognitivo</div><div class="area-bar"><div class="area-bar-fill" style="width:0%;background:#9B7FBE"></div></div><div class="area-pct">0%</div></div>
-        </div>
+        <div class="areas-grid" id="inicio-areas"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
         <div class="sec-header"><div class="sec-title">Acciones rápidas</div></div>
         <div class="qa-grid">
           <div class="qa-btn" onclick="goTo('diario')"><div class="qa-icon" style="background:#FDF0EA">📝</div><div><div class="qa-label">Diario</div><div class="qa-sub">Registrar hoy</div></div></div>
@@ -205,44 +252,26 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
           <div class="qa-btn"><div class="qa-icon" style="background:#EAF0F5">🔍</div><div><div class="qa-label">Observación</div><div class="qa-sub">Anotar algo</div></div></div>
         </div>
         <div class="sec-header"><div class="sec-title">Últimos Hitos</div><button class="sec-link" onclick="goTo('hitos')">Ver todos →</button></div>
-        <div class="hito-item"><div class="hito-dot" style="background:#E6F2EE">🤸</div><div class="hito-body"><div class="hito-name">Camina solo</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Gruesa</span></div></div><div class="hito-edad">18m</div></div>
-        <div class="hito-item"><div class="hito-dot" style="background:#FDF0EA">💬</div><div class="hito-body"><div class="hito-name">Dice 10–50 palabras</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Lenguaje</span></div></div><div class="hito-edad">61m</div></div>
-        <div class="hito-item"><div class="hito-dot" style="background:#FDF5E0">✋</div><div class="hito-body"><div class="hito-name">Agarra con pinza</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Fina</span></div></div><div class="hito-edad">12m</div></div>
-        <div class="hito-item"><div class="hito-dot" style="background:#FDF0EA">💬</div><div class="hito-body"><div class="hito-name">Habla en frases completas</div><div class="hito-meta"><span class="status s-progreso">⟳ En progreso</span><span class="hito-tag">Lenguaje</span></div></div><div class="hito-edad">92m</div></div>
+        <div id="inicio-hitos"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
       </div>
     </div>
 
     <!-- ÁREAS -->
     <div class="screen" id="screen-areas">
-      <div class="page-header"><div class="page-title">Áreas de Desarrollo</div><div class="page-sub">5 áreas activas · Edad madurativa est. 18m</div></div>
-      <div class="content">
-        <div class="big-areas-grid">
-          <div class="big-area-card" style="background:linear-gradient(135deg,#C4714A,#E8957A)"><div class="bac-top"><div class="bac-left"><div class="bac-icon">💬</div><div><div class="bac-name">Lenguaje</div><div class="bac-count">2 de 3 hitos</div></div></div><div class="bac-pct">67%</div></div><div class="bac-bar"><div class="bac-fill" style="width:67%"></div></div><div class="bac-edad">🧠 Edad mad. estimada: 61 meses</div></div>
-          <div class="big-area-card" style="background:linear-gradient(135deg,#5A8A7A,#7A9E8E)"><div class="bac-top"><div class="bac-left"><div class="bac-icon">🤸</div><div><div class="bac-name">Mot. Gruesa</div><div class="bac-count">1 de 1 hitos</div></div></div><div class="bac-pct">100%</div></div><div class="bac-bar"><div class="bac-fill" style="width:100%"></div></div><div class="bac-edad">🧠 Edad mad. estimada: 18 meses</div></div>
-          <div class="big-area-card" style="background:linear-gradient(135deg,#C49030,#D4A843)"><div class="bac-top"><div class="bac-left"><div class="bac-icon">✋</div><div><div class="bac-name">Mot. Fina</div><div class="bac-count">1 de 1 hitos</div></div></div><div class="bac-pct">100%</div></div><div class="bac-bar"><div class="bac-fill" style="width:100%"></div></div><div class="bac-edad">🧠 Edad mad. estimada: 12 meses</div></div>
-          <div class="big-area-card" style="background:linear-gradient(135deg,#3A4D62,#4A5D72)"><div class="bac-top"><div class="bac-left"><div class="bac-icon">👥</div><div><div class="bac-name">Social</div><div class="bac-count">0 de 2 hitos</div></div></div><div class="bac-pct">0%</div></div><div class="bac-bar"><div class="bac-fill" style="width:0%"></div></div><div class="bac-edad">🧠 Sin hitos logrados aún</div></div>
-          <div class="big-area-card" style="background:linear-gradient(135deg,#7A62A0,#9B7FBE)"><div class="bac-top"><div class="bac-left"><div class="bac-icon">🧩</div><div><div class="bac-name">Cognitivo</div><div class="bac-count">0 de 2 hitos</div></div></div><div class="bac-pct">0%</div></div><div class="bac-bar"><div class="bac-fill" style="width:0%"></div></div><div class="bac-edad">🧠 Sin hitos logrados aún</div></div>
-        </div>
-      </div>
+      <div class="page-header"><div class="page-title">Áreas de Desarrollo</div><div class="page-sub" id="areas-sub">Cargando...</div></div>
+      <div class="content"><div class="big-areas-grid" id="areas-grid"><div class="loading"><div class="spinner"></div> Cargando...</div></div></div>
     </div>
 
     <!-- HITOS -->
     <div class="screen" id="screen-hitos">
-      <div class="page-header"><div class="page-title">Hitos de Bruno</div><div class="page-sub">95 hitos en total · 3 logrados</div></div>
+      <div class="page-header"><div class="page-title">Hitos de Bruno</div><div class="page-sub" id="hitos-sub">Cargando...</div></div>
       <div class="filter-row">
         <button class="filter-btn active" onclick="filterHitos(this,'todos')">Todos</button>
-        <button class="filter-btn" onclick="filterHitos(this,'logrado')">✓ Logrados</button>
-        <button class="filter-btn" onclick="filterHitos(this,'progreso')">⟳ En progreso</button>
-        <button class="filter-btn" onclick="filterHitos(this,'pendiente')">· Pendientes</button>
+        <button class="filter-btn" onclick="filterHitos(this,'LOGRADO')">✓ Logrados</button>
+        <button class="filter-btn" onclick="filterHitos(this,'EN PROGRESO')">⟳ En progreso</button>
+        <button class="filter-btn" onclick="filterHitos(this,'PENDIENTE')">· Pendientes</button>
       </div>
-      <div class="content" id="hitos-list">
-        <div class="hito-item" data-estado="logrado"><div class="hito-dot" style="background:#E6F2EE">🤸</div><div class="hito-body"><div class="hito-name">Camina solo</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Gruesa · 12–18m</span></div></div><div class="hito-edad">18m</div></div>
-        <div class="hito-item" data-estado="logrado"><div class="hito-dot" style="background:#FDF0EA">💬</div><div class="hito-body"><div class="hito-name">Dice 10–50 palabras</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Lenguaje · 18–24m</span></div></div><div class="hito-edad">61m</div></div>
-        <div class="hito-item" data-estado="logrado"><div class="hito-dot" style="background:#FDF5E0">✋</div><div class="hito-body"><div class="hito-name">Agarra con pinza</div><div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">Mot. Fina · 6–12m</span></div></div><div class="hito-edad">12m</div></div>
-        <div class="hito-item" data-estado="progreso"><div class="hito-dot" style="background:#FDF0EA">💬</div><div class="hito-body"><div class="hito-name">Habla en frases completas</div><div class="hito-meta"><span class="status s-progreso">⟳ En progreso</span><span class="hito-tag">Lenguaje · 3–4 años</span></div></div><div class="hito-edad">92m</div></div>
-        <div class="hito-item" data-estado="pendiente"><div class="hito-dot" style="background:#EAF0F5">👥</div><div class="hito-body"><div class="hito-name">Juega "cucú"</div><div class="hito-meta"><span class="status s-pendiente">· Pendiente</span><span class="hito-tag">Social · 6–12m</span></div></div><div class="hito-edad">—</div></div>
-        <div class="hito-item" data-estado="pendiente"><div class="hito-dot" style="background:#F2EEF8">🧩</div><div class="hito-body"><div class="hito-name">Busca objetos que desaparecen</div><div class="hito-meta"><span class="status s-pendiente">· Pendiente</span><span class="hito-tag">Cognitivo · 6–12m</span></div></div><div class="hito-edad">—</div></div>
-      </div>
+      <div class="content" id="hitos-list"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
     </div>
 
     <!-- DIARIO -->
@@ -252,34 +281,33 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         <div class="diario-grid">
           <div class="form-card">
             <div class="form-card-title">😴 Sueño</div>
-            <div class="form-row"><label class="form-label">Calidad del sueño</label><div class="form-options"><div class="form-option" onclick="sel(this)">Bien</div><div class="form-option" onclick="sel(this)">Regular</div><div class="form-option" onclick="sel(this)">Malo</div></div></div>
-            <div class="form-row"><label class="form-label">Levantada nocturna</label><div class="form-options"><div class="form-option" onclick="sel(this)">Sí</div><div class="form-option" onclick="sel(this)">No</div></div></div>
-            <div class="form-row"><label class="form-label">Horas de sueño</label><input class="form-input" type="number" placeholder="ej. 8" style="width:120px"></div>
+            <div class="form-row"><label class="form-label">Calidad del sueño</label><div class="form-options"><div class="form-option" onclick="sel(this)">BIEN</div><div class="form-option" onclick="sel(this)">REGULAR</div><div class="form-option" onclick="sel(this)">MALO</div></div></div>
+            <div class="form-row"><label class="form-label">Levantada nocturna</label><div class="form-options"><div class="form-option" onclick="sel(this)">SI</div><div class="form-option" onclick="sel(this)">NO</div></div></div>
+            <div class="form-row"><label class="form-label">Horas de sueño</label><input class="form-input" id="d-horas" type="number" placeholder="ej. 8" style="width:120px"></div>
           </div>
           <div class="form-card">
             <div class="form-card-title">🍽️ Alimentación</div>
-            <div class="form-row"><label class="form-label">Horario comida</label><div class="form-options"><div class="form-option" onclick="sel(this)">Desayuno</div><div class="form-option" onclick="sel(this)">Almuerzo</div><div class="form-option" onclick="sel(this)">Merienda</div><div class="form-option" onclick="sel(this)">Snacks</div></div></div>
-            <div class="form-row"><label class="form-label">Menú consumido</label><input class="form-input" type="text" placeholder="¿Qué comió hoy?"></div>
+            <div class="form-row"><label class="form-label">Horario comida</label><div class="form-options"><div class="form-option" onclick="sel(this)">DESAYUNO</div><div class="form-option" onclick="sel(this)">ALMUERZO</div><div class="form-option" onclick="sel(this)">MERIENDA</div><div class="form-option" onclick="sel(this)">SNACKS</div></div></div>
+            <div class="form-row"><label class="form-label">Menú consumido</label><input class="form-input" id="d-menu" type="text" placeholder="¿Qué comió hoy?"></div>
           </div>
           <div class="form-card">
             <div class="form-card-title">🏫 Escuela y Terapias</div>
-            <div class="form-row"><label class="form-label">Estado en escuela</label><div class="form-options"><div class="form-option" onclick="sel(this)">Bien</div><div class="form-option" onclick="sel(this)">Regular</div><div class="form-option" onclick="sel(this)">Difícil</div></div></div>
-            <div class="form-row"><label class="form-label">Terapias hoy</label><div class="form-options"><div class="form-option" onclick="sel(this)">Sí</div><div class="form-option" onclick="sel(this)">No</div></div></div>
+            <div class="form-row"><label class="form-label">Estado en escuela</label><div class="form-options"><div class="form-option" onclick="sel(this)">BIEN</div><div class="form-option" onclick="sel(this)">REGULAR</div><div class="form-option" onclick="sel(this)">DIFICIL</div></div></div>
+            <div class="form-row"><label class="form-label">Terapias hoy</label><div class="form-options"><div class="form-option" onclick="sel(this)">SI</div><div class="form-option" onclick="sel(this)">NO</div></div></div>
+            <div class="form-row"><label class="form-label">Tipo de terapia</label><div class="form-options"><div class="form-option" onclick="sel(this)">LENGUAJE</div><div class="form-option" onclick="sel(this)">TO</div><div class="form-option" onclick="sel(this)">PSICOPEDAGOGIA</div><div class="form-option" onclick="sel(this)">DEPORTIVA</div><div class="form-option" onclick="sel(this)">OTRA</div></div></div>
           </div>
           <div class="form-card">
-            <div class="form-card-title">✨ Logro del día</div>
-            <div class="form-row"><input class="form-input" type="text" placeholder="¿Algo especial que hizo hoy?"></div>
-            <div class="form-card-title" style="margin-top:12px">📝 Notas generales</div>
-            <textarea class="form-input" rows="3" placeholder="Observaciones, cambios, notas médicas..."></textarea>
+            <div class="form-card-title">✨ Logro y Notas</div>
+            <div class="form-row"><label class="form-label">Logro del día</label><input class="form-input" id="d-logro" type="text" placeholder="¿Algo especial que hizo hoy?"></div>
+            <div class="form-row"><label class="form-label">Notas generales</label><textarea class="form-input" id="d-notas" rows="3" placeholder="Observaciones, cambios, notas médicas..."></textarea></div>
           </div>
         </div>
-        <button class="btn-save">💾 Guardar registro del día</button>
+        <button class="btn-save" id="btn-guardar-diario" onclick="guardarDiario()">💾 Guardar registro del día</button>
       </div>
     </div>
   </main>
 </div>
 
-<!-- MOBILE NAV -->
 <nav class="mobile-nav">
   <button class="mnav-btn active" id="mnav-inicio" onclick="goTo('inicio')"><div class="mnav-icon">🏠</div><div class="mnav-label">Inicio</div><div class="mnav-dot"></div></button>
   <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Áreas</div></button>
@@ -288,26 +316,412 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 </nav>
 
 <script>
-const SCREENS=['inicio','areas','hitos','diario'];
-function goTo(id){
-  SCREENS.forEach(s=>{
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const API_KEY = 'AIzaSyCaTsjoqkwuxLfikAwVCNJNUgq3SQevMT8';
+const SHEET_ID = '1N7VpP18ApZSzLINkdu7sG_BTC7dnfNUB017rDrlcENU';
+const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
+
+// COLORES POR ÁREA
+const AREA_CONFIG = {
+  'Lenguaje':          { icon:'💬', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
+  'Motricidad gruesa': { icon:'🤸', bg:'#E6F2EE', color:'#7A9E8E', grad:'linear-gradient(135deg,#5A8A7A,#7A9E8E)' },
+  'Motricidad fina':   { icon:'✋', bg:'#FDF5E0', color:'#D4A843', grad:'linear-gradient(135deg,#C49030,#D4A843)' },
+  'Social':            { icon:'👥', bg:'#EAF0F5', color:'#4A5D72', grad:'linear-gradient(135deg,#3A4D62,#4A5D72)' },
+  'Cognición':         { icon:'🧩', bg:'#F2EEF8', color:'#9B7FBE', grad:'linear-gradient(135deg,#7A62A0,#9B7FBE)' },
+  'Autonomía':         { icon:'🌟', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
+};
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function formatEdad(meses) {
+  if (!meses || meses === 0) return '—';
+  meses = parseInt(meses);
+  if (meses <= 24) return meses + ' meses';
+  const años = Math.floor(meses / 12);
+  const m = meses % 12;
+  if (m === 0) return años + (años === 1 ? ' año' : ' años');
+  return años + (años === 1 ? ' año' : ' años') + ' y ' + m + ' mes' + (m !== 1 ? 'es' : '');
+}
+
+function getAreaConfig(area) {
+  return AREA_CONFIG[area] || { icon:'📌', bg:'#EDE8E2', color:'#8A9AAB', grad:'linear-gradient(135deg,#8A9AAB,#4A5D72)' };
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function genID() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+// ═══════════════════════════════════════
+// FETCH SHEETS
+// ═══════════════════════════════════════
+async function fetchSheet(range) {
+  const url = `${BASE_URL}/values/${range}?key=${API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.values || [];
+}
+
+async function appendRow(sheet, values) {
+  const url = `${BASE_URL}/values/${sheet}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [values] })
+  });
+  return res.json();
+}
+
+async function updateCell(range, value) {
+  const url = `${BASE_URL}/values/${range}?valueInputOption=USER_ENTERED&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [[value]] })
+  });
+  return res.json();
+}
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let hitosBase = [];
+let hitosBruno = [];
+let currentHitoModal = null;
+let estadoSeleccionado = null;
+
+// ═══════════════════════════════════════
+// CARGAR DATOS
+// ═══════════════════════════════════════
+async function cargarDatos() {
+  try {
+    // Hitos Base
+    const hbRows = await fetchSheet('Hitos Base!A2:G200');
+    hitosBase = hbRows.map(r => ({
+      id: r[0] || '',
+      area: r[1] || '',
+      edadRef: r[2] || '',
+      hito: r[3] || '',
+      desc: r[4] || '',
+      minMeses: parseInt(r[5]) || 0,
+      maxMeses: parseInt(r[6]) || 0,
+    }));
+
+    // Hitos Bruno
+    const hBrunoRows = await fetchSheet('Hitos Bruno!A2:I200');
+    hitosBruno = hBrunoRows.filter(r => r[0]).map(r => ({
+      id: r[0] || '',
+      fecha: r[1] || '',
+      hitoId: r[2] || '',
+      estado: r[3] || 'PENDIENTE',
+      notas: r[4] || '',
+      evidencia: r[5] || '',
+      perfilId: r[6] || '',
+      edadMeses: parseInt(r[7]) || 0,
+      rowNum: hBrunoRows.indexOf(hBrunoRows.find(x => x[0] === r[0])) + 2
+    }));
+
+    renderTodo();
+  } catch(e) {
+    console.error(e);
+    showToast('Error cargando datos. Verifica la conexión.');
+  }
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function getEstadoHito(hitoBaseId) {
+  const hb = hitosBruno.find(h => String(h.hitoId) === String(hitoBaseId));
+  return hb || null;
+}
+
+function calcularAreas() {
+  const areas = {};
+  hitosBase.forEach(h => {
+    if (!areas[h.area]) areas[h.area] = { total:0, logrados:0, edades:[] };
+    areas[h.area].total++;
+    const estado = getEstadoHito(h.id);
+    if (estado && estado.estado === 'LOGRADO') {
+      areas[h.area].logrados++;
+      if (estado.edadMeses > 0) areas[h.area].edades.push(estado.edadMeses);
+    }
+  });
+  return areas;
+}
+
+function renderTodo() {
+  const areas = calcularAreas();
+  const totalHitos = hitosBase.length;
+  const logrados = hitosBruno.filter(h => h.estado === 'LOGRADO').length;
+  const enProgreso = hitosBruno.filter(h => h.estado === 'EN PROGRESO').length;
+  const pct = totalHitos > 0 ? Math.round((logrados / totalHitos) * 100) : 0;
+
+  // Ring
+  const offset = 138 - (138 * pct / 100);
+  document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  document.getElementById('ring-pct').textContent = pct + '%';
+  document.getElementById('hero-progreso-sub').textContent = `${logrados} de ${totalHitos} hitos logrados`;
+  document.getElementById('pill-logrados').textContent = `✓ ${logrados} logrados`;
+  document.getElementById('pill-progreso').textContent = `⟳ ${enProgreso} en curso`;
+
+  // Edad madurativa global
+  const todasEdades = hitosBruno.filter(h => h.estado === 'LOGRADO' && h.edadMeses > 0).map(h => h.edadMeses);
+  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b) => a+b, 0) / todasEdades.length) : 0;
+  document.getElementById('sidebar-edad-mad').textContent = edadMad > 0 ? `Edad mad. ${formatEdad(edadMad)}` : 'Sin datos aún';
+
+  renderAreasInicio(areas);
+  renderAreasGrid(areas);
+  renderHitosList();
+  renderHitosInicio();
+  document.getElementById('areas-sub').textContent = `${Object.keys(areas).length} áreas · ${logrados} hitos logrados`;
+  document.getElementById('hitos-sub').textContent = `${totalHitos} hitos en total · ${logrados} logrados`;
+}
+
+function renderAreasInicio(areas) {
+  const el = document.getElementById('inicio-areas');
+  if (Object.keys(areas).length === 0) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><div class="empty-state-text">Sin áreas aún</div></div>'; return; }
+  el.innerHTML = Object.entries(areas).map(([area, data]) => {
+    const cfg = getAreaConfig(area);
+    const pct = data.total > 0 ? Math.round((data.logrados / data.total) * 100) : 0;
+    return `<div class="area-card" onclick="goTo('areas')">
+      <div class="area-icon" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="area-name">${area}</div>
+      <div class="area-bar"><div class="area-bar-fill" style="width:${pct}%;background:${cfg.color}"></div></div>
+      <div class="area-pct">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAreasGrid(areas) {
+  const el = document.getElementById('areas-grid');
+  if (Object.keys(areas).length === 0) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><div class="empty-state-text">Sin áreas aún</div></div>'; return; }
+  el.innerHTML = Object.entries(areas).map(([area, data]) => {
+    const cfg = getAreaConfig(area);
+    const pct = data.total > 0 ? Math.round((data.logrados / data.total) * 100) : 0;
+    const edadMad = data.edades.length > 0 ? Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length) : 0;
+    const edadText = edadMad > 0 ? `🧠 Edad mad. estimada: ${formatEdad(edadMad)}` : '🧠 Sin hitos logrados aún';
+    return `<div class="big-area-card" style="background:${cfg.grad}">
+      <div class="bac-top">
+        <div class="bac-left">
+          <div class="bac-icon">${cfg.icon}</div>
+          <div><div class="bac-name">${area}</div><div class="bac-count">${data.logrados} de ${data.total} hitos</div></div>
+        </div>
+        <div class="bac-pct">${pct}%</div>
+      </div>
+      <div class="bac-bar"><div class="bac-fill" style="width:${pct}%"></div></div>
+      <div class="bac-edad">${edadText}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHitosList(filtro = 'todos') {
+  const el = document.getElementById('hitos-list');
+  let html = '';
+  hitosBase.forEach(h => {
+    const estadoObj = getEstadoHito(h.id);
+    const estado = estadoObj ? estadoObj.estado : 'PENDIENTE';
+    if (filtro !== 'todos' && estado !== filtro) return;
+    const cfg = getAreaConfig(h.area);
+    const edadLogrado = estadoObj && estadoObj.edadMeses > 0 ? formatEdad(estadoObj.edadMeses) : '—';
+    let statusClass = estado === 'LOGRADO' ? 's-logrado' : estado === 'EN PROGRESO' ? 's-progreso' : 's-pendiente';
+    let statusText = estado === 'LOGRADO' ? '✓ Logrado' : estado === 'EN PROGRESO' ? '⟳ En progreso' : '· Pendiente';
+    html += `<div class="hito-item" onclick="openModal(${h.id})">
+      <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="hito-body">
+        <div class="hito-name">${h.hito}</div>
+        <div class="hito-meta"><span class="status ${statusClass}">${statusText}</span><span class="hito-tag">${h.area} · ${h.edadRef}</span></div>
+      </div>
+      <div class="hito-edad">${edadLogrado}</div>
+    </div>`;
+  });
+  if (!html) html = '<div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">No hay hitos en esta categoría</div></div>';
+  el.innerHTML = html;
+}
+
+function renderHitosInicio() {
+  const el = document.getElementById('inicio-hitos');
+  const recientes = hitosBruno.filter(h => h.estado === 'LOGRADO').slice(-4).reverse();
+  if (recientes.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">Aún no hay hitos logrados. ¡Toca un hito para marcarlo!</div></div>';
+    return;
+  }
+  el.innerHTML = recientes.map(h => {
+    const base = hitosBase.find(b => String(b.id) === String(h.hitoId));
+    if (!base) return '';
+    const cfg = getAreaConfig(base.area);
+    return `<div class="hito-item" onclick="openModal(${base.id})">
+      <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="hito-body">
+        <div class="hito-name">${base.hito}</div>
+        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">${base.area}</span></div>
+      </div>
+      <div class="hito-edad">${formatEdad(h.edadMeses)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// MODAL HITO
+// ═══════════════════════════════════════
+function openModal(hitoId) {
+  const base = hitosBase.find(h => String(h.id) === String(hitoId));
+  if (!base) return;
+  currentHitoModal = base;
+  estadoSeleccionado = null;
+  document.getElementById('modal-hito-nombre').textContent = base.hito;
+  document.getElementById('modal-hito-area').textContent = base.area + ' · ' + base.edadRef;
+  document.getElementById('modal-edad').value = '';
+  document.getElementById('modal-notas').value = '';
+  // Preselect estado actual
+  const estadoActual = getEstadoHito(hitoId);
+  document.querySelectorAll('.modal-option').forEach(opt => opt.classList.remove('selected'));
+  if (estadoActual) {
+    estadoSeleccionado = estadoActual.estado;
+    document.querySelectorAll('.modal-option').forEach(opt => {
+      if (opt.textContent.includes(estadoActual.estado === 'LOGRADO' ? 'Logrado' : estadoActual.estado === 'EN PROGRESO' ? 'En progreso' : 'Pendiente')) {
+        opt.classList.add('selected');
+      }
+    });
+    if (estadoActual.edadMeses) document.getElementById('modal-edad').value = estadoActual.edadMeses;
+    if (estadoActual.notas) document.getElementById('modal-notas').value = estadoActual.notas;
+  }
+  document.getElementById('modal-hito').classList.add('open');
+}
+
+function selectEstado(el, estado) {
+  document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  estadoSeleccionado = estado;
+}
+
+function closeModal() {
+  document.getElementById('modal-hito').classList.remove('open');
+  currentHitoModal = null;
+  estadoSeleccionado = null;
+}
+
+async function guardarHito() {
+  if (!estadoSeleccionado) { showToast('Selecciona un estado primero'); return; }
+  const edad = document.getElementById('modal-edad').value;
+  const notas = document.getElementById('modal-notas').value;
+  const fecha = new Date().toLocaleDateString('es-EC');
+  
+  // Buscar si ya existe en Hitos Bruno
+  const existente = getEstadoHito(currentHitoModal.id);
+  
+  try {
+    if (existente) {
+      // Actualizar fila existente — buscar en sheet
+      const rows = await fetchSheet('Hitos Bruno!A2:I200');
+      const rowIdx = rows.findIndex(r => String(r[0]) === String(existente.id));
+      if (rowIdx >= 0) {
+        const rowNum = rowIdx + 2;
+        await updateCell(`Hitos Bruno!D${rowNum}`, estadoSeleccionado);
+        if (edad) await updateCell(`Hitos Bruno!H${rowNum}`, edad);
+        if (notas) await updateCell(`Hitos Bruno!E${rowNum}`, notas);
+      }
+    } else {
+      // Nueva fila
+      const id = genID();
+      await appendRow('Hitos Bruno', [id, fecha, currentHitoModal.id, estadoSeleccionado, notas, '', '1', edad || '']);
+    }
+    closeModal();
+    showToast('✅ Hito guardado correctamente');
+    await cargarDatos();
+  } catch(e) {
+    showToast('Error guardando. Intenta de nuevo.');
+    console.error(e);
+  }
+}
+
+// ═══════════════════════════════════════
+// DIARIO
+// ═══════════════════════════════════════
+function getSelectedOption(container) {
+  const sel = container.querySelector('.form-option.selected');
+  return sel ? sel.textContent.trim() : '';
+}
+
+async function guardarDiario() {
+  const btn = document.getElementById('btn-guardar-diario');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  const fecha = new Date().toLocaleDateString('es-EC');
+  const sueno = getSelectedOption(document.querySelectorAll('.form-card')[0]);
+  const levantada = document.querySelectorAll('.form-card')[0].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent || '';
+  const horas = document.getElementById('d-horas').value;
+  const horarioComida = getSelectedOption(document.querySelectorAll('.form-card')[1]);
+  const menu = document.getElementById('d-menu').value;
+  const escuela = getSelectedOption(document.querySelectorAll('.form-card')[2]);
+  const terapias = document.querySelectorAll('.form-card')[2].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent || '';
+  const tipoTerapia = document.querySelectorAll('.form-card')[2].querySelectorAll('.form-options')[2].querySelector('.selected')?.textContent || '';
+  const logro = document.getElementById('d-logro').value;
+  const notas = document.getElementById('d-notas').value;
+
+  try {
+    const id = genID();
+    await appendRow('Diario', [id, fecha, sueno, levantada, horas, horarioComida, menu, escuela, terapias, tipoTerapia, logro, '', notas]);
+    showToast('✅ Diario guardado correctamente');
+    // Limpiar
+    document.querySelectorAll('#screen-diario .form-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('d-horas').value = '';
+    document.getElementById('d-menu').value = '';
+    document.getElementById('d-logro').value = '';
+    document.getElementById('d-notas').value = '';
+  } catch(e) {
+    showToast('Error guardando. Intenta de nuevo.');
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '💾 Guardar registro del día';
+}
+
+// ═══════════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════════
+const SCREENS = ['inicio','areas','hitos','diario'];
+
+function goTo(id) {
+  SCREENS.forEach(s => {
     document.getElementById('screen-'+s).classList.remove('active');
-    ['snav-','mnav-'].forEach(p=>{const el=document.getElementById(p+s);if(el)el.classList.remove('active');});
+    ['snav-','mnav-'].forEach(p => { const el = document.getElementById(p+s); if(el) el.classList.remove('active'); });
   });
   document.getElementById('screen-'+id).classList.add('active');
-  ['snav-','mnav-'].forEach(p=>{const el=document.getElementById(p+id);if(el)el.classList.add('active');});
+  ['snav-','mnav-'].forEach(p => { const el = document.getElementById(p+id); if(el) el.classList.add('active'); });
   document.querySelector('.main')?.scrollTo(0,0);
   window.scrollTo(0,0);
 }
-function sel(el){el.parentElement.querySelectorAll('.form-option').forEach(s=>s.classList.remove('selected'));el.classList.add('selected');}
-function filterHitos(btn,estado){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('#hitos-list .hito-item').forEach(item=>{item.style.display=(estado==='todos'||item.dataset.estado===estado)?'flex':'none';});
+
+function sel(el) {
+  el.parentElement.querySelectorAll('.form-option').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
 }
-document.getElementById('fecha-hoy').textContent=new Date().toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-document.querySelectorAll('.mnav-dot').forEach((d,i)=>{if(i>0)d.style.display='none';});
+
+function filterHitos(btn, estado) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHitosList(estado);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-EC', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.querySelectorAll('.mnav-dot').forEach((d,i) => { if(i>0) d.style.display='none'; });
+
+cargarDatos();
 </script>
 </body>
 </html>
-
