@@ -406,6 +406,12 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
           </div>
         </div>
 
+        <div class="form-card">
+          <div class="form-card-title">📄 Informe PDF</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Genera un informe completo del desarrollo para compartir con médicos, terapeutas o familia.</p>
+          <button onclick="generarPDF()" style="width:100%;padding:14px;border-radius:12px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;cursor:pointer;">📄 Generar y Descargar Informe</button>
+        </div>
+
       </div>
     </div>
 
@@ -946,6 +952,172 @@ async function cargarFotoGuardada() {
       if (el) el.innerHTML = emoji;
     });
   }
+}
+
+// ═══════════════════════════════════════
+// GENERAR PDF
+// ═══════════════════════════════════════
+function generarPDF() {
+  showToast('📄 Generando informe...');
+
+  const nombre = localStorage.getItem('bruno-nombre') || 'Bruno';
+  const foto = localStorage.getItem('bruno-foto') || '';
+  const areas = calcularAreas();
+  const totalHitos = hitosBase.length;
+  const logrados = hitosBruno.filter(h => h.estado === 'LOGRADO').length;
+  const enProgreso = hitosBruno.filter(h => h.estado === 'EN PROGRESO').length;
+  const pct = totalHitos > 0 ? Math.round((logrados / totalHitos) * 100) : 0;
+  const todasEdades = hitosBruno.filter(h => h.estado === 'LOGRADO' && h.edadMeses > 0).map(h => h.edadMeses);
+  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b)=>a+b,0)/todasEdades.length) : 0;
+  const fecha = new Date().toLocaleDateString('es-EC', {year:'numeric',month:'long',day:'numeric'});
+
+  // Hitos logrados con fecha
+  const hitosLogrados = hitosBruno.filter(h => h.estado === 'LOGRADO').map(h => {
+    const base = hitosBase.find(b => String(b.id) === String(h.hitoId));
+    return base ? { hito: base.hito, area: base.area, fecha: h.fecha, edad: h.edadMeses } : null;
+  }).filter(Boolean);
+
+  // Barras de progreso por área (SVG)
+  const areasHTML = Object.entries(areas).map(([area, data]) => {
+    const p = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
+    const edadA = data.edades.length > 0 ? formatEdad(Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length)) : '—';
+    const cfg = getAreaConfig(area);
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:700;font-size:14px;">${cfg.icon} ${area}</span>
+          <span style="font-size:12px;color:#666;">${data.logrados}/${data.total} hitos · Edad mad: ${edadA}</span>
+        </div>
+        <div style="background:#EDE8E2;border-radius:99px;height:10px;overflow:hidden;">
+          <div style="width:${p}%;height:100%;background:${cfg.color};border-radius:99px;"></div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:#888;margin-top:2px;">${p}%</div>
+      </div>`;
+  }).join('');
+
+  // Hitos logrados tabla
+  const hitosTabla = hitosLogrados.length > 0 ? hitosLogrados.map(h => `
+    <tr style="border-bottom:1px solid #EDE8E2;">
+      <td style="padding:8px 6px;font-size:12px;">${h.hito}</td>
+      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.area}</td>
+      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.fecha || '—'}</td>
+      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.edad ? formatEdad(h.edad) : '—'}</td>
+    </tr>`).join('') : '<tr><td colspan="4" style="padding:16px;text-align:center;color:#888;font-size:13px;">No hay hitos logrados aún</td></tr>';
+
+  // Gráfico de barras SVG por área
+  const areaEntries = Object.entries(areas);
+  const barWidth = areaEntries.length > 0 ? Math.min(60, Math.floor(400/areaEntries.length) - 10) : 60;
+  const barsHTML = areaEntries.map(([area, data], i) => {
+    const p = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
+    const cfg = getAreaConfig(area);
+    const x = i * (barWidth + 10) + 20;
+    const barH = Math.round((p/100) * 120);
+    const y = 140 - barH;
+    const shortName = area.length > 8 ? area.substring(0,8)+'.' : area;
+    return `
+      <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="4" fill="${cfg.color}" opacity="0.85"/>
+      <text x="${x + barWidth/2}" y="${y-6}" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">${p}%</text>
+      <text x="${x + barWidth/2}" y="158" text-anchor="middle" font-size="9" fill="#666">${shortName}</text>`;
+  }).join('');
+
+  const svgWidth = areaEntries.length * (barWidth + 10) + 40;
+
+  const fotoHTML = foto ? `<img src="${foto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #C4714A;margin-right:20px;">` : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#C4714A,#D4A843);display:flex;align-items:center;justify-content:center;font-size:40px;margin-right:20px;">🐻</div>`;
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe de Desarrollo - ${nombre}</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1E2A35; }
+  .page { max-width: 800px; margin: 0 auto; padding: 40px; }
+  .header { background: linear-gradient(135deg, #1E2A35, #2C3A4A); color: white; padding: 32px; border-radius: 16px; margin-bottom: 28px; display: flex; align-items: center; }
+  .header-info h1 { font-size: 28px; margin: 0 0 4px; }
+  .header-info p { margin: 3px 0; font-size: 13px; opacity: .7; }
+  .badge { display: inline-block; background: rgba(255,255,255,.15); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-top: 8px; margin-right: 6px; }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 18px; font-weight: bold; color: #1E2A35; border-left: 4px solid #C4714A; padding-left: 12px; margin-bottom: 16px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 24px; }
+  .stat-box { background: #F7F3EE; border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: bold; color: #C4714A; }
+  .stat-lbl { font-size: 12px; color: #8A9AAB; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #F7F3EE; padding: 10px 6px; font-size: 12px; text-align: left; color: #8A9AAB; text-transform: uppercase; letter-spacing: .5px; }
+  .footer { text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid #EDE8E2; font-size: 11px; color: #8A9AAB; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    ${fotoHTML}
+    <div class="header-info">
+      <h1>Informe de Desarrollo</h1>
+      <p style="font-size:20px;font-weight:bold;margin:4px 0;">${nombre}</p>
+      <p>Fecha del informe: ${fecha}</p>
+      <div>
+        <span class="badge">✓ ${logrados} logrados</span>
+        <span class="badge">⟳ ${enProgreso} en progreso</span>
+        <span class="badge">🧠 Edad mad. ${edadMad > 0 ? formatEdad(edadMad) : 'Sin datos'}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Resumen General</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-lbl">Progreso Global</div></div>
+      <div class="stat-box"><div class="stat-num">${logrados}</div><div class="stat-lbl">Hitos Logrados</div></div>
+      <div class="stat-box"><div class="stat-num">${edadMad > 0 ? formatEdad(edadMad) : '—'}</div><div class="stat-lbl">Edad Madurativa</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Gráfico de Progreso por Área</div>
+    <svg width="${svgWidth}" height="170" viewBox="0 0 ${svgWidth} 170" style="max-width:100%;">
+      <line x1="10" y1="20" x2="10" y2="145" stroke="#EDE8E2" stroke-width="1"/>
+      <line x1="10" y1="145" x2="${svgWidth-10}" y2="145" stroke="#EDE8E2" stroke-width="1"/>
+      ${barsHTML}
+    </svg>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Progreso por Área</div>
+    ${areasHTML}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Hitos Logrados (${logrados})</div>
+    <table>
+      <thead><tr>
+        <th>Hito</th><th>Área</th><th>Fecha</th><th>Edad al lograr</th>
+      </tr></thead>
+      <tbody>${hitosTabla}</tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Generado por App BRUNO · ${fecha} · Informe de seguimiento del desarrollo infantil
+  </div>
+
+</div>
+<script>window.onload = function() { window.print(); }<\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
+  if (!win) {
+    // Si no se abre popup, descargar directamente
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Informe_${nombre}_${new Date().toLocaleDateString('es-EC').replace(/\//g,'-')}.html`;
+    a.click();
+  }
+  showToast('✅ Informe generado — usa Ctrl+P para guardar como PDF');
 }
 
 // ═══════════════════════════════════════
