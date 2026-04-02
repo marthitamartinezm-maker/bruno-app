@@ -477,27 +477,57 @@ function genID() {
 // ═══════════════════════════════════════
 async function fetchSheet(range) {
   const url = `${BASE_URL}/values/${range}?key=${API_KEY}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data.values || [];
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    const data = await res.json();
+    return data.values || [];
+  } catch(e) {
+    clearTimeout(timeout);
+    if (e.name === 'AbortError') console.warn('Timeout cargando:', range);
+    return [];
+  }
 }
 
 async function appendRow(sheet, values) {
   const url = `${BASE_URL}/values/${sheet}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [values] })
-  });
-  return res.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [values] }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    return res.json();
+  } catch(e) {
+    clearTimeout(timeout);
+    throw e;
+  }
 }
 
 async function updateCell(range, value) {
   const url = `${BASE_URL}/values/${range}?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [[value]] })
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ values: [[value]] }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    return res.json();
+  } catch(e) {
+    clearTimeout(timeout);
+    throw e;
+  }
+}
   });
   return res.json();
 }
@@ -544,7 +574,9 @@ async function cargarDatos() {
     renderTodo();
   } catch(e) {
     console.error(e);
-    showToast('Error cargando datos. Verifica la conexión.');
+    // Si falla, renderizar con datos vacíos para no quedar cargando
+    renderTodo();
+    showToast('⚠️ Sin conexión — mostrando datos guardados');
   }
 }
 
@@ -1204,10 +1236,9 @@ function guardarColores() {
     const c = ['terra','terra2','navy','navy2','cream','sand'].reduce((o,k) => { o[k]=s.getPropertyValue('--'+k).trim(); return o; }, {});
     const json = JSON.stringify(c);
     localStorage.setItem('bruno-colores', json);
-    // Guardar en cookie con expiración de 1 año
-    const exp = new Date();
-    exp.setFullYear(exp.getFullYear() + 1);
-    document.cookie = `bruno-colores=${encodeURIComponent(json)};expires=${exp.toUTCString()};path=/`;
+    const exp = new Date(); exp.setFullYear(exp.getFullYear() + 2);
+    document.cookie = `bruno-colores=${encodeURIComponent(json)};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+    guardarEnIDB('colores', json);
   } catch(e) {}
 }
 
@@ -1228,9 +1259,9 @@ function setModo(modo) {
     document.body.style.background = '#D8D2CA';
   }
   localStorage.setItem('bruno-modo', modo);
-  const exp = new Date();
-  exp.setFullYear(exp.getFullYear() + 1);
-  document.cookie = `bruno-modo=${modo};expires=${exp.toUTCString()};path=/`;
+  const exp = new Date(); exp.setFullYear(exp.getFullYear() + 2);
+  document.cookie = `bruno-modo=${modo};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
+  guardarEnIDB('modo', modo);
   showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
 }
 
@@ -1239,13 +1270,38 @@ function getCookie(name) {
   return match ? decodeURIComponent(match[2]) : null;
 }
 
+// IndexedDB — más persistente en iOS Safari PWA
+let idb = null;
+function abrirIDB() {
+  return new Promise((resolve, reject) => {
+    if (idb) { resolve(idb); return; }
+    const req = indexedDB.open('bruno-app', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('config');
+    req.onsuccess = e => { idb = e.target.result; resolve(idb); };
+    req.onerror = reject;
+  });
+}
+async function guardarEnIDB(key, value) {
+  try { const db = await abrirIDB(); const tx = db.transaction('config','readwrite'); tx.objectStore('config').put(value, key); } catch(e) {}
+}
+async function leerDeIDB(key) {
+  try {
+    const db = await abrirIDB();
+    return new Promise(resolve => {
+      const req = db.transaction('config','readonly').objectStore('config').get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+  } catch(e) { return null; }
+}
+
 async function cargarColoresGuardados() {
   try {
-    // Intentar cookie primero (más persistente)
-    const cookieColores = getCookie('bruno-colores');
-    const cookieModo = getCookie('bruno-modo');
-    if (cookieColores) {
-      const c = JSON.parse(cookieColores);
+    // 1. IndexedDB (más persistente en iOS PWA)
+    const idbColores = await leerDeIDB('colores');
+    const idbModo = await leerDeIDB('modo');
+    if (idbColores) {
+      const c = JSON.parse(idbColores);
       Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
       try {
         document.getElementById('color-terra').value = c.terra || '#C4714A';
@@ -1253,8 +1309,16 @@ async function cargarColoresGuardados() {
         document.getElementById('color-cream').value = c.cream || '#F7F3EE';
       } catch(e) {}
     }
+    if (idbModo) { setModo(idbModo); return; }
+    // 2. Cookie
+    const cookieColores = getCookie('bruno-colores');
+    const cookieModo = getCookie('bruno-modo');
+    if (cookieColores) {
+      const c = JSON.parse(cookieColores);
+      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
+    }
     if (cookieModo) { setModo(cookieModo); return; }
-    // Fallback localStorage
+    // 3. localStorage
     const lsColores = localStorage.getItem('bruno-colores');
     if (lsColores) {
       const c = JSON.parse(lsColores);
