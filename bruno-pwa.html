@@ -895,24 +895,11 @@ function aplicarNombre(nombre) {
 }
 
 async function cargarNombreGuardado() {
-  try {
-    const rows = await fetchSheet('Perfil!H2');
-    if (rows && rows[0] && rows[0][0]) {
-      const nombre = rows[0][0];
-      aplicarNombre(nombre);
-      localStorage.setItem('bruno-nombre', nombre);
-      const input = document.getElementById('input-nombre');
-      if (input) input.value = nombre;
-      return;
-    }
-  } catch(e) {}
-  // Fallback localStorage
-  const nombre = localStorage.getItem('bruno-nombre');
-  if (nombre) {
-    aplicarNombre(nombre);
-    const input = document.getElementById('input-nombre');
-    if (input) input.value = nombre;
-  }
+  // Solo localStorage — no llamar a Sheets para no bloquear carga
+  const nombre = localStorage.getItem('bruno-nombre') || 'Bruno';
+  aplicarNombre(nombre);
+  const input = document.getElementById('input-nombre');
+  if (input) input.value = nombre;
 }
 
 // ═══════════════════════════════════════
@@ -980,17 +967,7 @@ function seleccionarEmoji(emoji) {
 }
 
 async function cargarFotoGuardada() {
-  // Primero intentar cargar desde Google Sheets
-  try {
-    const rows = await fetchSheet('Perfil!E2');
-    if (rows && rows[0] && rows[0][0] && rows[0][0].startsWith('data:image')) {
-      const dataUrl = rows[0][0];
-      localStorage.setItem('bruno-foto', dataUrl);
-      aplicarFoto(dataUrl);
-      return;
-    }
-  } catch(e) {}
-  // Si no hay foto en Sheet, usar localStorage
+  // Solo localStorage — no llamar a Sheets para no bloquear carga
   const foto = localStorage.getItem('bruno-foto');
   const emoji = localStorage.getItem('bruno-emoji') || '🐻';
   if (foto) {
