@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>BRUNO</title>
-<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy:#1E2A35; --navy2:#2C3A4A;
@@ -20,6 +20,8 @@
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); min-height:100vh; }
 .app { display:flex; min-height:100vh; max-width:1200px; margin:0 auto; background:var(--cream); box-shadow:0 0 80px rgba(0,0,0,.2); }
+
+/* SIDEBAR */
 .sidebar { width:240px; flex-shrink:0; background:var(--navy); display:flex; flex-direction:column; padding:36px 0 24px; position:sticky; top:0; height:100vh; }
 .sidebar-logo { padding:0 24px 28px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:16px; }
 .sidebar-logo-title { font-family:'Gilda Display',serif; font-size:32px; color:#fff; line-height:1; }
@@ -28,25 +30,27 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .nav-item { display:flex; align-items:center; gap:12px; padding:12px 24px; cursor:pointer; background:none; border:none; width:100%; text-align:left; transition:background .15s; }
 .nav-item:hover { background:rgba(255,255,255,.06); }
 .nav-item.active { background:rgba(255,255,255,.1); }
-.nav-item-icon { font-size:18px; flex-shrink:0; }
+.nav-item-icon { font-size:18px; }
 .nav-item-label { font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:rgba(255,255,255,.5); }
 .nav-item.active .nav-item-label { color:#fff; }
 .sidebar-footer { padding:16px 24px 0; border-top:1px solid rgba(255,255,255,.08); margin-top:16px; }
 .bruno-chip { display:flex; align-items:center; gap:10px; }
-.bruno-avatar { width:61px; height:61px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:32px; flex-shrink:0; overflow:hidden; cursor:pointer; position:relative; }
-.bruno-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+.bruno-avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
 .bruno-name { font-size:13px; font-weight:700; color:#fff; }
 .bruno-sub { font-size:10px; color:rgba(255,255,255,.4); margin-top:1px; }
+
+/* MAIN */
 .main { flex:1; overflow-y:auto; min-width:0; }
 .screen { display:none; min-height:100vh; }
 .screen.active { display:block; }
+
+/* HERO */
 .hero { background:linear-gradient(160deg,var(--navy2),var(--navy)); padding:40px 32px 28px; position:relative; overflow:hidden; }
 .hero::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(196,113,74,.25) 0%,transparent 70%); }
 .hero-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
 .hero-greeting { font-size:11px; color:rgba(255,255,255,.5); letter-spacing:1.5px; text-transform:uppercase; }
 .hero-name { font-family:'Gilda Display',serif; font-size:32px; color:#fff; line-height:1; margin-top:2px; }
-.hero-avatar { width:77px; height:77px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:42px; box-shadow:0 4px 14px rgba(196,113,74,.4); overflow:hidden; cursor:pointer; }
-.hero-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+.hero-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:26px; }
 .hero-card { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px; display:flex; align-items:center; gap:18px; }
 .ring-wrap { position:relative; width:60px; height:60px; flex-shrink:0; }
 .ring-wrap svg { transform:rotate(-90deg); }
@@ -59,42 +63,53 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .pill { padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; }
 .pill-green { background:rgba(122,158,142,.3); color:#A8C4B8; }
 .pill-amber { background:rgba(212,168,67,.3); color:var(--amber); }
+
+/* CONTENT */
 .content { padding:24px 32px; }
 .sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
 .sec-title { font-family:'Gilda Display',serif; font-size:20px; color:var(--ink); }
 .sec-link { font-size:12px; color:var(--terra); font-weight:700; cursor:pointer; background:none; border:none; }
+
+/* AREAS */
 .areas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-bottom:28px; }
-.area-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:16px 14px; cursor:pointer; transition:transform .15s,box-shadow .15s; }
-.area-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.08); }
+.area-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:16px 14px; cursor:pointer; transition:transform .15s; }
+.area-card:hover { transform:translateY(-2px); }
 .area-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:10px; }
 .area-name { font-size:10px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
 .area-bar { height:5px; background:var(--sand); border-radius:99px; overflow:hidden; margin-bottom:5px; }
 .area-bar-fill { height:100%; border-radius:99px; transition:width .8s ease; }
 .area-pct { font-size:12px; font-weight:700; color:var(--navy2); }
+
+/* QA */
 .qa-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:28px; }
-.qa-btn { background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:16px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:transform .15s; }
-.qa-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.06); }
+.qa-btn { background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:16px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; }
 .qa-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
 .qa-label { font-size:13px; font-weight:700; color:var(--navy2); }
 .qa-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+
+/* HITOS */
 .hito-item { display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:14px 16px; margin-bottom:8px; cursor:pointer; transition:transform .15s; }
-.hito-item:hover { transform:translateX(2px); box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.hito-item:hover { transform:translateX(2px); }
 .hito-dot { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
 .hito-body { flex:1; min-width:0; }
 .hito-name { font-size:14px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .hito-meta { display:flex; align-items:center; gap:6px; margin-top:3px; flex-wrap:wrap; }
 .hito-tag { font-size:11px; color:var(--muted); }
-.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; cursor:pointer; }
+.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
 .s-logrado { background:#D8EDE6; color:#5A9080; }
 .s-progreso { background:#F5E8C0; color:#A07020; }
 .s-pendiente { background:var(--sand); color:var(--muted); }
 .hito-edad { font-size:12px; color:var(--muted); flex-shrink:0; white-space:nowrap; }
+
+/* PAGE HEADER */
 .page-header { padding:32px 32px 0; margin-bottom:4px; }
 .page-title { font-family:'Gilda Display',serif; font-size:28px; color:var(--ink); }
 .page-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+
+/* BIG AREAS */
 .big-areas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
-.big-area-card { border-radius:18px; padding:22px; position:relative; overflow:hidden; cursor:pointer; transition:transform .15s,box-shadow .15s; }
-.big-area-card:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.15); }
+.big-area-card { border-radius:18px; padding:22px; position:relative; overflow:hidden; cursor:pointer; transition:transform .15s; }
+.big-area-card:hover { transform:translateY(-2px); }
 .big-area-card::before { content:''; position:absolute; top:-20px; right:-20px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.12); }
 .bac-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
 .bac-left { display:flex; align-items:center; gap:12px; }
@@ -103,33 +118,26 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .bac-count { font-size:11px; color:rgba(255,255,255,.65); margin-top:2px; }
 .bac-pct { font-family:'Gilda Display',serif; font-size:30px; color:#fff; }
 .bac-bar { height:6px; background:rgba(255,255,255,.2); border-radius:99px; overflow:hidden; }
-.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; transition:width .8s ease; }
+.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; }
 .bac-edad { display:inline-flex; align-items:center; gap:4px; margin-top:10px; font-size:11px; color:rgba(255,255,255,.7); background:rgba(255,255,255,.15); padding:3px 10px; border-radius:20px; }
+
+/* FILTER */
 .filter-row { display:flex; gap:8px; flex-wrap:wrap; padding:16px 32px 0; }
 .filter-btn { padding:7px 16px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s; }
 .filter-btn.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* DIARIO */
 .diario-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
 .form-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:18px; }
-.form-card-title { font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.form-card-title { font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:16px; }
 .form-row { margin-bottom:14px; }
 .form-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:7px; display:block; }
 .form-options { display:flex; gap:6px; flex-wrap:wrap; }
 .form-option { padding:7px 14px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer; transition:all .15s; }
 .form-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
-.form-input { width:100%; padding:10px 14px; border:1.5px solid var(--sand); border-radius:10px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink); background:var(--cream); outline:none; transition:border .15s; }
+.form-input { width:100%; padding:10px 14px; border:1.5px solid var(--sand); border-radius:10px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink); background:var(--cream); outline:none; }
 .form-input:focus { border-color:var(--terra); }
-.btn-save { width:100%; padding:14px; border-radius:12px; background:var(--terra); border:none; color:#fff; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; transition:background .15s; }
-.btn-save:hover { background:#b5623e; }
-.btn-save:disabled { background:var(--muted); cursor:not-allowed; }
-.mobile-nav { display:none; }
-.loading { display:flex; align-items:center; justify-content:center; padding:40px; color:var(--muted); font-size:14px; gap:10px; }
-.spinner { width:20px; height:20px; border:2px solid var(--sand); border-top-color:var(--terra); border-radius:50%; animation:spin .8s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
-.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; opacity:0; transition:opacity .3s; pointer-events:none; }
-.toast.show { opacity:1; }
-.empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
-.empty-state-icon { font-size:40px; margin-bottom:12px; }
-.empty-state-text { font-size:14px; }
+.btn-save { width:100%; padding:14px; border-radius:12px; background:var(--terra); border:none; color:#fff; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; }
 
 /* MODAL */
 .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
@@ -137,15 +145,25 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 .modal { background:var(--white); border-radius:20px; padding:24px; width:100%; max-width:400px; }
 .modal-title { font-family:'Gilda Display',serif; font-size:20px; color:var(--ink); margin-bottom:6px; }
 .modal-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
-.modal-options { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
-.modal-option { padding:12px 16px; border-radius:12px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; text-align:left; transition:all .15s; display:flex; align-items:center; gap:10px; }
-.modal-option:hover { border-color:var(--terra); }
+.modal-options { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.modal-option { padding:12px 16px; border-radius:12px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; text-align:left; display:flex; align-items:center; gap:10px; }
 .modal-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
 .modal-input { margin-bottom:12px; }
 .modal-btns { display:flex; gap:8px; }
 .btn-cancel { flex:1; padding:12px; border-radius:10px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer; }
 .btn-confirm { flex:1; padding:12px; border-radius:10px; border:none; background:var(--terra); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#fff; cursor:pointer; }
 
+/* TOAST */
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
+.toast.show { opacity:1; }
+.loading { display:flex; align-items:center; justify-content:center; padding:40px; color:var(--muted); font-size:14px; gap:10px; }
+.spinner { width:20px; height:20px; border:2px solid var(--sand); border-top-color:var(--terra); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
+.empty-state-icon { font-size:40px; margin-bottom:12px; }
+
+/* MOBILE */
+.mobile-nav { display:none; }
 @media (max-width:768px) {
   body { background:var(--cream); }
   .app { flex-direction:column; box-shadow:none; max-width:100%; }
@@ -167,15 +185,11 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
   .diario-grid { grid-template-columns:1fr; }
 }
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-.hero,.area-card,.hito-item,.big-area-card,.form-card { animation:fadeUp .35s ease both; }
+.hero { animation:fadeUp .35s ease both; }
 </style>
 </head>
 <body>
 
-<!-- INPUT FOTO OCULTO -->
-<input type="file" id="input-foto" accept="image/png,image/jpeg,image/gif,image/webp" style="display:none;position:fixed;top:-100px" onchange="cargarFoto(this)">
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- MODAL HITO -->
@@ -206,7 +220,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-title" id="sidebar-app-nombre">BRUNO</div>
+      <div class="sidebar-logo-title">BRUNO</div>
       <div class="sidebar-logo-sub">App de Desarrollo</div>
     </div>
     <nav class="sidebar-nav">
@@ -214,14 +228,11 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
       <button class="nav-item" id="snav-areas" onclick="goTo('areas')"><div class="nav-item-icon">🌱</div><div class="nav-item-label">Avances</div></button>
       <button class="nav-item" id="snav-hitos" onclick="goTo('hitos')"><div class="nav-item-icon">🎯</div><div class="nav-item-label">Hitos</div></button>
       <button class="nav-item" id="snav-diario" onclick="goTo('diario')"><div class="nav-item-icon">📋</div><div class="nav-item-label">Diario</div></button>
-      <button class="nav-item" id="snav-config" onclick="goTo('config')"><div class="nav-item-icon">⚙️</div><div class="nav-item-label">Configuración</div></button>
     </nav>
     <div class="sidebar-footer">
       <div class="bruno-chip">
-        <div class="bruno-avatar" onclick="abrirSelectorFoto()" title="Toca para cambiar foto">
-          <span id="sidebar-avatar-emoji">🐻</span>
-        </div>
-        <div><div class="bruno-name" id="sidebar-nombre">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Cargando...</div></div>
+        <div class="bruno-avatar">🐻</div>
+        <div><div class="bruno-name" id="sidebar-nombre">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Sin datos aún</div></div>
       </div>
     </div>
   </aside>
@@ -232,9 +243,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
       <div class="hero">
         <div class="hero-top">
           <div><div class="hero-greeting" id="hero-saludo">Buenos días ☀️</div><div class="hero-name">Hola, <span id="hero-nombre">Bruno</span></div></div>
-          <div class="hero-avatar" onclick="abrirSelectorFoto()" title="Toca para cambiar foto">
-            <span id="hero-avatar-emoji">🐻</span>
-          </div>
+          <div class="hero-avatar">🐻</div>
         </div>
         <div class="hero-card">
           <div class="ring-wrap">
@@ -266,7 +275,7 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
       </div>
     </div>
 
-    <!-- ÁREAS -->
+    <!-- AVANCES -->
     <div class="screen" id="screen-areas">
       <div class="page-header"><div class="page-title">Avances de Áreas de Desarrollo</div><div class="page-sub" id="areas-sub">Cargando...</div></div>
       <div class="content"><div class="big-areas-grid" id="areas-grid"><div class="loading"><div class="spinner"></div> Cargando...</div></div></div>
@@ -315,106 +324,6 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
         <button class="btn-save" id="btn-guardar-diario" onclick="guardarDiario()">💾 Guardar registro del día</button>
       </div>
     </div>
-    <!-- CONFIGURACIÓN -->
-    <div class="screen" id="screen-config">
-      <div class="page-header"><div class="page-title">Configuración</div><div class="page-sub">Personaliza tu app BRUNO</div></div>
-      <div class="content">
-
-        <div class="form-card" style="margin-bottom:14px">
-          <div class="form-card-title">✏️ Nombre del niño/a</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Cambia el nombre que aparece en la app.</p>
-          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <input class="form-input" id="input-nombre" type="text" placeholder="Nombre del niño/a" style="max-width:240px;">
-            <button onclick="guardarNombre()" style="padding:10px 20px;border-radius:10px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Guardar nombre</button>
-          </div>
-        </div>
-
-        <div class="form-card" style="margin-bottom:14px">
-          <div class="form-card-title">📸 Foto y Avatar</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Sube una foto o elige un animalito como avatar.</p>
-          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
-            <div id="config-avatar-wrap" onclick="abrirSelectorFoto()" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--amber));display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;overflow:hidden;border:3px solid var(--sand);">
-              <span id="config-avatar-emoji">🐻</span>
-            </div>
-            <div>
-              <button onclick="abrirSelectorFoto()" style="padding:10px 20px;border-radius:10px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:block;margin-bottom:8px;">📷 Subir foto</button>
-              <button onclick="borrarFoto()" style="padding:8px 16px;border-radius:10px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;">🗑 Quitar foto</button>
-            </div>
-          </div>
-          <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">O elige un animalito</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button onclick="seleccionarEmoji('🐻')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐻</button>
-            <button onclick="seleccionarEmoji('🐯')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐯</button>
-            <button onclick="seleccionarEmoji('🦁')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦁</button>
-            <button onclick="seleccionarEmoji('🐼')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐼</button>
-            <button onclick="seleccionarEmoji('🐨')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐨</button>
-            <button onclick="seleccionarEmoji('🦊')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦊</button>
-            <button onclick="seleccionarEmoji('🐰')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐰</button>
-            <button onclick="seleccionarEmoji('🐸')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐸</button>
-            <button onclick="seleccionarEmoji('🦋')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦋</button>
-            <button onclick="seleccionarEmoji('🐬')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐬</button>
-            <button onclick="seleccionarEmoji('🦄')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦄</button>
-            <button onclick="seleccionarEmoji('🐘')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐘</button>
-            <button onclick="seleccionarEmoji('🦒')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦒</button>
-            <button onclick="seleccionarEmoji('🐧')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🐧</button>
-            <button onclick="seleccionarEmoji('🦜')" style="width:44px;height:44px;border-radius:12px;border:2px solid var(--sand);background:var(--cream);font-size:24px;cursor:pointer;">🦜</button>
-          </div>
-        </div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Elige el color de acento de la app — botones, links y detalles.</p>
-          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-              <input type="color" id="color-terra" value="#C4714A" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('terra',this.value)">
-              <span style="font-size:11px;color:var(--muted);">Principal</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-              <input type="color" id="color-navy" value="#1E2A35" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('navy',this.value)">
-              <span style="font-size:11px;color:var(--muted);">Sidebar</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-              <input type="color" id="color-cream" value="#F7F3EE" style="width:48px;height:48px;border-radius:12px;border:2px solid var(--sand);cursor:pointer;padding:2px;" onchange="aplicarColor('cream',this.value)">
-              <span style="font-size:11px;color:var(--muted);">Fondo</span>
-            </div>
-          </div>
-          <div style="margin-top:20px;">
-            <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Paletas sugeridas</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="palette-btn" onclick="aplicarPaleta('terracota')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
-                <span style="width:14px;height:14px;border-radius:50%;background:#C4714A;display:inline-block"></span> Terracota
-              </button>
-              <button class="palette-btn" onclick="aplicarPaleta('oceano')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
-                <span style="width:14px;height:14px;border-radius:50%;background:#1A6B9A;display:inline-block"></span> Océano
-              </button>
-              <button class="palette-btn" onclick="aplicarPaleta('bosque')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
-                <span style="width:14px;height:14px;border-radius:50%;background:#2D6A4F;display:inline-block"></span> Bosque
-              </button>
-              <button class="palette-btn" onclick="aplicarPaleta('lavanda')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
-                <span style="width:14px;height:14px;border-radius:50%;background:#7B5EA7;display:inline-block"></span> Lavanda
-              </button>
-              <button class="palette-btn" onclick="aplicarPaleta('rosa')" style="display:flex;gap:4px;align-items:center;padding:8px 14px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);cursor:pointer;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;">
-                <span style="width:14px;height:14px;border-radius:50%;background:#C4547A;display:inline-block"></span> Rosa
-              </button>
-            </div>
-          </div>
-          <button onclick="resetColores()" style="margin-top:16px;padding:8px 16px;border-radius:10px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;">↺ Restaurar colores originales</button>
-        </div>
-
-        <div class="form-card">
-          <div class="form-card-title">🌓 Modo de visualización</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button onclick="setModo('claro')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">☀️ Claro</button>
-            <button onclick="setModo('oscuro')" style="padding:10px 20px;border-radius:20px;border:1.5px solid var(--sand);background:var(--white);font-family:Nunito,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🌙 Oscuro</button>
-          </div>
-        </div>
-
-        <div class="form-card">
-          <div class="form-card-title">📄 Informe PDF</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Genera un informe completo del desarrollo para compartir con médicos, terapeutas o familia.</p>
-          <button onclick="generarPDF()" style="width:100%;padding:14px;border-radius:12px;background:var(--terra);border:none;color:#fff;font-family:Nunito,sans-serif;font-size:15px;font-weight:700;cursor:pointer;">📄 Generar y Descargar Informe</button>
-        </div>
-
-      </div>
-    </div>
-
   </main>
 </div>
 
@@ -423,18 +332,13 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
   <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Avances</div></button>
   <button class="mnav-btn" id="mnav-hitos" onclick="goTo('hitos')"><div class="mnav-icon">🎯</div><div class="mnav-label">Hitos</div></button>
   <button class="mnav-btn" id="mnav-diario" onclick="goTo('diario')"><div class="mnav-icon">📋</div><div class="mnav-label">Diario</div></button>
-  <button class="mnav-btn" id="mnav-config" onclick="goTo('config')"><div class="mnav-icon">⚙️</div><div class="mnav-label">Config</div></button>
 </nav>
 
 <script>
-// ═══════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════
 const API_KEY = 'AIzaSyBYBXC-uRyvhH4evhbiS56fHczysJY6BoQ';
 const SHEET_ID = '1N7VpP18ApZSzLINkdu7sG_BTC7dnfNUB017rDrlcENU';
 const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
 
-// COLORES POR ÁREA
 const AREA_CONFIG = {
   'Lenguaje':          { icon:'💬', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
   'Motricidad gruesa': { icon:'🤸', bg:'#E6F2EE', color:'#7A9E8E', grad:'linear-gradient(135deg,#5A8A7A,#7A9E8E)' },
@@ -444,9 +348,6 @@ const AREA_CONFIG = {
   'Autonomía':         { icon:'🌟', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
 };
 
-// ═══════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════
 function formatEdad(meses) {
   if (!meses || meses === 0) return '—';
   meses = parseInt(meses);
@@ -454,7 +355,7 @@ function formatEdad(meses) {
   const años = Math.floor(meses / 12);
   const m = meses % 12;
   if (m === 0) return años + (años === 1 ? ' año' : ' años');
-  return años + (años === 1 ? ' año' : ' años') + ' y ' + m + ' mes' + (m !== 1 ? 'es' : '');
+  return años + ' ' + (años === 1 ? 'año' : 'años') + ' y ' + m + ' mes' + (m !== 1 ? 'es' : '');
 }
 
 function getAreaConfig(area) {
@@ -465,127 +366,91 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-function genID() {
-  return Math.random().toString(36).substr(2, 9);
-}
+function genID() { return Math.random().toString(36).substr(2, 9); }
 
-// ═══════════════════════════════════════
-// FETCH SHEETS
-// ═══════════════════════════════════════
+// FETCH con timeout
 async function fetchSheet(range) {
-  const url = `${BASE_URL}/values/${range}?key=${API_KEY}`;
+  const url = `${BASE_URL}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+  const timeout = setTimeout(() => controller.abort(), 10000);
   try {
     const res = await fetch(url, { signal: controller.signal });
     clearTimeout(timeout);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     return data.values || [];
   } catch(e) {
     clearTimeout(timeout);
-    if (e.name === 'AbortError') console.warn('Timeout cargando:', range);
+    console.error('fetchSheet error:', e.message);
     return [];
   }
 }
 
 async function appendRow(sheet, values) {
-  const url = `${BASE_URL}/values/${sheet}!A1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values: [values] }),
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    return res.json();
-  } catch(e) {
-    clearTimeout(timeout);
-    throw e;
-  }
-}
-
-async function updateCell(range, value) {
-  const url = `${BASE_URL}/values/${range}?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ values: [[value]] }),
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    return res.json();
-  } catch(e) {
-    clearTimeout(timeout);
-    throw e;
-  }
-}
+  const url = `${BASE_URL}/values/${encodeURIComponent(sheet + '!A1')}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [values] })
   });
   return res.json();
 }
 
-// ═══════════════════════════════════════
+async function updateCell(range, value) {
+  const url = `${BASE_URL}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED&key=${API_KEY}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: [[value]] })
+  });
+  return res.json();
+}
+
 // STATE
-// ═══════════════════════════════════════
 let hitosBase = [];
 let hitosBruno = [];
 let currentHitoModal = null;
 let estadoSeleccionado = null;
 
-// ═══════════════════════════════════════
 // CARGAR DATOS
-// ═══════════════════════════════════════
 async function cargarDatos() {
   try {
-    // Hitos Base
-    const hbRows = await fetchSheet('Hitos Base!A2:G200');
+    const [hbRows, hBrunoRows] = await Promise.all([
+      fetchSheet('Hitos Base!A2:G200'),
+      fetchSheet('Hitos Bruno!A2:H200')
+    ]);
+
     hitosBase = hbRows.map(r => ({
       id: r[0] || '',
       area: r[1] || '',
       edadRef: r[2] || '',
       hito: r[3] || '',
-      desc: r[4] || '',
       minMeses: parseInt(r[5]) || 0,
       maxMeses: parseInt(r[6]) || 0,
     }));
 
-    // Hitos Bruno
-    const hBrunoRows = await fetchSheet('Hitos Bruno!A2:I200');
     hitosBruno = hBrunoRows.filter(r => r[0]).map(r => ({
       id: r[0] || '',
       fecha: r[1] || '',
       hitoId: r[2] || '',
       estado: r[3] || 'PENDIENTE',
       notas: r[4] || '',
-      evidencia: r[5] || '',
-      perfilId: r[6] || '',
       edadMeses: parseInt(r[7]) || 0,
-      rowNum: hBrunoRows.indexOf(hBrunoRows.find(x => x[0] === r[0])) + 2
     }));
 
     renderTodo();
   } catch(e) {
     console.error(e);
-    // Si falla, renderizar con datos vacíos para no quedar cargando
     renderTodo();
-    showToast('⚠️ Sin conexión — mostrando datos guardados');
+    showToast('⚠️ Error cargando datos');
   }
 }
 
-// ═══════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════
 function getEstadoHito(hitoBaseId) {
-  const hb = hitosBruno.find(h => String(h.hitoId) === String(hitoBaseId));
-  return hb || null;
+  return hitosBruno.find(h => String(h.hitoId) === String(hitoBaseId)) || null;
 }
 
 function calcularAreas() {
@@ -609,7 +474,6 @@ function renderTodo() {
   const enProgreso = hitosBruno.filter(h => h.estado === 'EN PROGRESO').length;
   const pct = totalHitos > 0 ? Math.round((logrados / totalHitos) * 100) : 0;
 
-  // Ring
   const offset = 138 - (138 * pct / 100);
   document.getElementById('ring-fill').style.strokeDashoffset = offset;
   document.getElementById('ring-pct').textContent = pct + '%';
@@ -617,9 +481,8 @@ function renderTodo() {
   document.getElementById('pill-logrados').textContent = `✓ ${logrados} logrados`;
   document.getElementById('pill-progreso').textContent = `⟳ ${enProgreso} en curso`;
 
-  // Edad madurativa global
   const todasEdades = hitosBruno.filter(h => h.estado === 'LOGRADO' && h.edadMeses > 0).map(h => h.edadMeses);
-  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b) => a+b, 0) / todasEdades.length) : 0;
+  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b)=>a+b,0)/todasEdades.length) : 0;
   document.getElementById('sidebar-edad-mad').textContent = edadMad > 0 ? `Edad mad. ${formatEdad(edadMad)}` : 'Sin datos aún';
 
   renderAreasInicio(areas);
@@ -627,15 +490,15 @@ function renderTodo() {
   renderHitosList();
   renderHitosInicio();
   document.getElementById('areas-sub').textContent = `${Object.keys(areas).length} áreas · ${logrados} hitos logrados`;
-  document.getElementById('hitos-sub').textContent = `${totalHitos} hitos en total · ${logrados} logrados`;
+  document.getElementById('hitos-sub').textContent = `${totalHitos} hitos · ${logrados} logrados`;
 }
 
 function renderAreasInicio(areas) {
   const el = document.getElementById('inicio-areas');
-  if (Object.keys(areas).length === 0) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><div class="empty-state-text">Sin áreas aún</div></div>'; return; }
+  if (!Object.keys(areas).length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><p>Sin áreas aún</p></div>'; return; }
   el.innerHTML = Object.entries(areas).map(([area, data]) => {
     const cfg = getAreaConfig(area);
-    const pct = data.total > 0 ? Math.round((data.logrados / data.total) * 100) : 0;
+    const pct = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
     return `<div class="area-card" onclick="goTo('areas')">
       <div class="area-icon" style="background:${cfg.bg}">${cfg.icon}</div>
       <div class="area-name">${area}</div>
@@ -647,27 +510,20 @@ function renderAreasInicio(areas) {
 
 function renderAreasGrid(areas) {
   const el = document.getElementById('areas-grid');
-  if (Object.keys(areas).length === 0) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><div class="empty-state-text">Sin áreas aún</div></div>'; return; }
+  if (!Object.keys(areas).length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><p>Sin áreas aún</p></div>'; return; }
   el.innerHTML = Object.entries(areas).map(([area, data]) => {
     const cfg = getAreaConfig(area);
-    const pct = data.total > 0 ? Math.round((data.logrados / data.total) * 100) : 0;
-    const edadMad = data.edades.length > 0 ? Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length) : 0;
-    const edadText = edadMad > 0 ? `🧠 Edad mad. estimada: ${formatEdad(edadMad)}` : '🧠 Sin hitos logrados aún';
+    const pct = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
+    const edadMad = data.edades.length > 0 ? formatEdad(Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length)) : '—';
     return `<div class="big-area-card" style="background:${cfg.grad}">
-      <div class="bac-top">
-        <div class="bac-left">
-          <div class="bac-icon">${cfg.icon}</div>
-          <div><div class="bac-name">${area}</div><div class="bac-count">${data.logrados} de ${data.total} hitos</div></div>
-        </div>
-        <div class="bac-pct">${pct}%</div>
-      </div>
+      <div class="bac-top"><div class="bac-left"><div class="bac-icon">${cfg.icon}</div><div><div class="bac-name">${area}</div><div class="bac-count">${data.logrados} de ${data.total} hitos</div></div></div><div class="bac-pct">${pct}%</div></div>
       <div class="bac-bar"><div class="bac-fill" style="width:${pct}%"></div></div>
-      <div class="bac-edad">${edadText}</div>
+      <div class="bac-edad">🧠 Edad mad. estimada: ${edadMad}</div>
     </div>`;
   }).join('');
 }
 
-function renderHitosList(filtro = 'todos') {
+function renderHitosList(filtro='todos') {
   const el = document.getElementById('hitos-list');
   let html = '';
   hitosBase.forEach(h => {
@@ -676,48 +532,38 @@ function renderHitosList(filtro = 'todos') {
     if (filtro !== 'todos' && estado !== filtro) return;
     const cfg = getAreaConfig(h.area);
     const edadLogrado = estadoObj && estadoObj.edadMeses > 0 ? formatEdad(estadoObj.edadMeses) : '—';
-    let statusClass = estado === 'LOGRADO' ? 's-logrado' : estado === 'EN PROGRESO' ? 's-progreso' : 's-pendiente';
-    let statusText = estado === 'LOGRADO' ? '✓ Logrado' : estado === 'EN PROGRESO' ? '⟳ En progreso' : '· Pendiente';
-    html += `<div class="hito-item" onclick="openModal(${h.id})">
+    const statusClass = estado==='LOGRADO' ? 's-logrado' : estado==='EN PROGRESO' ? 's-progreso' : 's-pendiente';
+    const statusText = estado==='LOGRADO' ? '✓ Logrado' : estado==='EN PROGRESO' ? '⟳ En progreso' : '· Pendiente';
+    html += `<div class="hito-item" onclick="openModal('${h.id}')">
       <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
-      <div class="hito-body">
-        <div class="hito-name">${h.hito}</div>
-        <div class="hito-meta"><span class="status ${statusClass}">${statusText}</span><span class="hito-tag">${h.area} · ${h.edadRef}</span></div>
-      </div>
+      <div class="hito-body"><div class="hito-name">${h.hito}</div>
+      <div class="hito-meta"><span class="status ${statusClass}">${statusText}</span><span class="hito-tag">${h.area} · ${h.edadRef}</span></div></div>
       <div class="hito-edad">${edadLogrado}</div>
     </div>`;
   });
-  if (!html) html = '<div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">No hay hitos en esta categoría</div></div>';
-  el.innerHTML = html;
+  el.innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">🎯</div><p>No hay hitos en esta categoría</p></div>';
 }
 
 function renderHitosInicio() {
   const el = document.getElementById('inicio-hitos');
-  const recientes = hitosBruno.filter(h => h.estado === 'LOGRADO').slice(-4).reverse();
-  if (recientes.length === 0) {
-    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">Aún no hay hitos logrados. ¡Toca un hito para marcarlo!</div></div>';
-    return;
-  }
+  const recientes = hitosBruno.filter(h => h.estado==='LOGRADO').slice(-4).reverse();
+  if (!recientes.length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎯</div><p>Toca un hito para marcarlo como logrado</p></div>'; return; }
   el.innerHTML = recientes.map(h => {
-    const base = hitosBase.find(b => String(b.id) === String(h.hitoId));
+    const base = hitosBase.find(b => String(b.id)===String(h.hitoId));
     if (!base) return '';
     const cfg = getAreaConfig(base.area);
-    return `<div class="hito-item" onclick="openModal(${base.id})">
+    return `<div class="hito-item" onclick="openModal('${base.id}')">
       <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
-      <div class="hito-body">
-        <div class="hito-name">${base.hito}</div>
-        <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">${base.area}</span></div>
-      </div>
+      <div class="hito-body"><div class="hito-name">${base.hito}</div>
+      <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">${base.area}</span></div></div>
       <div class="hito-edad">${formatEdad(h.edadMeses)}</div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════
-// MODAL HITO
-// ═══════════════════════════════════════
+// MODAL
 function openModal(hitoId) {
-  const base = hitosBase.find(h => String(h.id) === String(hitoId));
+  const base = hitosBase.find(h => String(h.id)===String(hitoId));
   if (!base) return;
   currentHitoModal = base;
   estadoSeleccionado = null;
@@ -725,14 +571,15 @@ function openModal(hitoId) {
   document.getElementById('modal-hito-area').textContent = base.area + ' · ' + base.edadRef;
   document.getElementById('modal-edad').value = '';
   document.getElementById('modal-notas').value = '';
-  // Preselect estado actual
+  document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
   const estadoActual = getEstadoHito(hitoId);
-  document.querySelectorAll('.modal-option').forEach(opt => opt.classList.remove('selected'));
   if (estadoActual) {
     estadoSeleccionado = estadoActual.estado;
-    document.querySelectorAll('.modal-option').forEach(opt => {
-      if (opt.textContent.includes(estadoActual.estado === 'LOGRADO' ? 'Logrado' : estadoActual.estado === 'EN PROGRESO' ? 'En progreso' : 'Pendiente')) {
-        opt.classList.add('selected');
+    document.querySelectorAll('.modal-option').forEach(o => {
+      if ((estadoActual.estado==='LOGRADO' && o.textContent.includes('Logrado')) ||
+          (estadoActual.estado==='EN PROGRESO' && o.textContent.includes('progreso')) ||
+          (estadoActual.estado==='PENDIENTE' && o.textContent.includes('Pendiente'))) {
+        o.classList.add('selected');
       }
     });
     if (estadoActual.edadMeses) document.getElementById('modal-edad').value = estadoActual.edadMeses;
@@ -758,15 +605,11 @@ async function guardarHito() {
   const edad = document.getElementById('modal-edad').value;
   const notas = document.getElementById('modal-notas').value;
   const fecha = new Date().toLocaleDateString('es-EC');
-  
-  // Buscar si ya existe en Hitos Bruno
   const existente = getEstadoHito(currentHitoModal.id);
-  
   try {
     if (existente) {
-      // Actualizar fila existente — buscar en sheet
-      const rows = await fetchSheet('Hitos Bruno!A2:I200');
-      const rowIdx = rows.findIndex(r => String(r[0]) === String(existente.id));
+      const rows = await fetchSheet('Hitos Bruno!A2:H200');
+      const rowIdx = rows.findIndex(r => String(r[0])===String(existente.id));
       if (rowIdx >= 0) {
         const rowNum = rowIdx + 2;
         await updateCell(`Hitos Bruno!D${rowNum}`, estadoSeleccionado);
@@ -774,12 +617,10 @@ async function guardarHito() {
         if (notas) await updateCell(`Hitos Bruno!E${rowNum}`, notas);
       }
     } else {
-      // Nueva fila
-      const id = genID();
-      await appendRow('Hitos Bruno', [id, fecha, currentHitoModal.id, estadoSeleccionado, notas, '', '1', edad || '']);
+      await appendRow('Hitos Bruno', [genID(), fecha, currentHitoModal.id, estadoSeleccionado, notas, '', '1', edad||'']);
     }
     closeModal();
-    showToast('✅ Hito guardado correctamente');
+    showToast('✅ Hito guardado');
     await cargarDatos();
   } catch(e) {
     showToast('Error guardando. Intenta de nuevo.');
@@ -787,533 +628,71 @@ async function guardarHito() {
   }
 }
 
-// ═══════════════════════════════════════
 // DIARIO
-// ═══════════════════════════════════════
-function getSelectedOption(container) {
-  const sel = container.querySelector('.form-option.selected');
-  return sel ? sel.textContent.trim() : '';
+function getSelectedOpt(container) {
+  const s = container.querySelector('.form-option.selected');
+  return s ? s.textContent.trim() : '';
 }
 
 async function guardarDiario() {
   const btn = document.getElementById('btn-guardar-diario');
-  btn.disabled = true;
-  btn.textContent = 'Guardando...';
-
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  const cards = document.querySelectorAll('#screen-diario .form-card');
   const fecha = new Date().toLocaleDateString('es-EC');
-  const sueno = getSelectedOption(document.querySelectorAll('.form-card')[0]);
-  const levantada = document.querySelectorAll('.form-card')[0].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent || '';
-  const horas = document.getElementById('d-horas').value;
-  const horarioComida = getSelectedOption(document.querySelectorAll('.form-card')[1]);
-  const menu = document.getElementById('d-menu').value;
-  const escuela = getSelectedOption(document.querySelectorAll('.form-card')[2]);
-  const terapias = document.querySelectorAll('.form-card')[2].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent || '';
-  const tipoTerapia = document.querySelectorAll('.form-card')[2].querySelectorAll('.form-options')[2].querySelector('.selected')?.textContent || '';
-  const logro = document.getElementById('d-logro').value;
-  const notas = document.getElementById('d-notas').value;
-
   try {
-    const id = genID();
-    await appendRow('Diario', [id, fecha, sueno, levantada, horas, horarioComida, menu, escuela, terapias, tipoTerapia, logro, '', notas]);
-    showToast('✅ Diario guardado correctamente');
-    // Limpiar
+    await appendRow('Diario', [
+      genID(), fecha,
+      getSelectedOpt(cards[0]),
+      cards[0].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent||'',
+      document.getElementById('d-horas').value,
+      getSelectedOpt(cards[1]),
+      document.getElementById('d-menu').value,
+      getSelectedOpt(cards[2]),
+      cards[2].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent||'',
+      cards[2].querySelectorAll('.form-options')[2].querySelector('.selected')?.textContent||'',
+      document.getElementById('d-logro').value,
+      '', document.getElementById('d-notas').value
+    ]);
+    showToast('✅ Diario guardado');
     document.querySelectorAll('#screen-diario .form-option').forEach(o => o.classList.remove('selected'));
-    document.getElementById('d-horas').value = '';
-    document.getElementById('d-menu').value = '';
-    document.getElementById('d-logro').value = '';
-    document.getElementById('d-notas').value = '';
-  } catch(e) {
-    showToast('Error guardando. Intenta de nuevo.');
-    console.error(e);
-  }
-
-  btn.disabled = false;
-  btn.textContent = '💾 Guardar registro del día';
+    document.getElementById('d-horas').value='';
+    document.getElementById('d-menu').value='';
+    document.getElementById('d-logro').value='';
+    document.getElementById('d-notas').value='';
+  } catch(e) { showToast('Error guardando'); console.error(e); }
+  btn.disabled=false; btn.textContent='💾 Guardar registro del día';
 }
 
-// ═══════════════════════════════════════
 // NAVEGACIÓN
-// ═══════════════════════════════════════
-const SCREENS = ['inicio','areas','hitos','diario','config'];
-
+const SCREENS = ['inicio','areas','hitos','diario'];
 function goTo(id) {
   SCREENS.forEach(s => {
     document.getElementById('screen-'+s).classList.remove('active');
-    ['snav-','mnav-'].forEach(p => { const el = document.getElementById(p+s); if(el) el.classList.remove('active'); });
+    ['snav-','mnav-'].forEach(p => { const el=document.getElementById(p+s); if(el) el.classList.remove('active'); });
   });
   document.getElementById('screen-'+id).classList.add('active');
-  ['snav-','mnav-'].forEach(p => { const el = document.getElementById(p+id); if(el) el.classList.add('active'); });
+  ['snav-','mnav-'].forEach(p => { const el=document.getElementById(p+id); if(el) el.classList.add('active'); });
   document.querySelector('.main')?.scrollTo(0,0);
   window.scrollTo(0,0);
 }
 
-function sel(el) {
-  el.parentElement.querySelectorAll('.form-option').forEach(s => s.classList.remove('selected'));
-  el.classList.add('selected');
-}
+function sel(el) { el.parentElement.querySelectorAll('.form-option').forEach(s=>s.classList.remove('selected')); el.classList.add('selected'); }
 
 function filterHitos(btn, estado) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderHitosList(estado);
 }
 
-function abrirSelectorFoto() {
-  const input = document.getElementById('input-foto');
-  input.value = '';
-  input.click();
-}
-  const hora = new Date().getHours();
-  let saludo;
-  if (hora >= 5 && hora < 12) saludo = 'Buenos días ☀️';
-  else if (hora >= 12 && hora < 19) saludo = 'Buenas tardes 🌤️';
-  else saludo = 'Buenas noches 🌙';
-  const el = document.getElementById('hero-saludo');
-  if (el) el.textContent = saludo;
-}
-
-// ═══════════════════════════════════════
-// NOMBRE
-// ═══════════════════════════════════════
-function guardarNombre() {
-  const nombre = document.getElementById('input-nombre').value.trim();
-  if (!nombre) { showToast('Escribe un nombre primero'); return; }
-  localStorage.setItem('bruno-nombre', nombre);
-  aplicarNombre(nombre);
-  updateCell('Perfil!H2', nombre).catch(()=>{});
-  showToast('✅ Nombre actualizado: ' + nombre);
-}
-
-function aplicarNombre(nombre) {
-  const ids = ['hero-nombre','sidebar-nombre','sidebar-app-nombre'];
-  const valores = [nombre, nombre, nombre.toUpperCase()];
-  ids.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = valores[i];
-  });
-  document.title = nombre.toUpperCase();
-}
-
-async function cargarNombreGuardado() {
-  // Solo localStorage — no llamar a Sheets para no bloquear carga
-  const nombre = localStorage.getItem('bruno-nombre') || 'Bruno';
-  aplicarNombre(nombre);
-  const input = document.getElementById('input-nombre');
-  if (input) input.value = nombre;
-}
-
-// ═══════════════════════════════════════
-// FOTO DE PERFIL
-// ═══════════════════════════════════════
-function cargarFoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  // Comprimir imagen antes de guardar
-  const canvas = document.createElement('canvas');
-  const img = new Image();
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    img.onload = function() {
-      const MAX = 200;
-      let w = img.width, h = img.height;
-      if (w > h) { if (w > MAX) { h = h*(MAX/w); w = MAX; } }
-      else { if (h > MAX) { w = w*(MAX/h); h = MAX; } }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-      localStorage.setItem('bruno-foto', dataUrl);
-      aplicarFoto(dataUrl);
-      guardarFotoEnSheet(dataUrl);
-      showToast('📸 Foto actualizada y sincronizada');
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function guardarFotoEnSheet(dataUrl) {
-  try {
-    await updateCell('Perfil!E2', dataUrl);
-  } catch(e) { console.error('Error guardando foto en sheet:', e); }
-}
-
-function aplicarFoto(dataUrl) {
-  const ids = ['hero-avatar-emoji','sidebar-avatar-emoji','config-avatar-emoji'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`;
-  });
-}
-
-function borrarFoto() {
-  localStorage.removeItem('bruno-foto');
-  ['hero-avatar-emoji','sidebar-avatar-emoji','config-avatar-emoji'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = localStorage.getItem('bruno-emoji') || '🐻';
-  });
-  try { updateCell('Perfil!E2', ''); } catch(e) {}
-  showToast('🗑 Foto eliminada');
-}
-
-function seleccionarEmoji(emoji) {
-  localStorage.removeItem('bruno-foto');
-  localStorage.setItem('bruno-emoji', emoji);
-  ['hero-avatar-emoji','sidebar-avatar-emoji','config-avatar-emoji'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = emoji;
-  });
-  showToast('Avatar actualizado ' + emoji);
-}
-
-async function cargarFotoGuardada() {
-  // Solo localStorage — no llamar a Sheets para no bloquear carga
-  const foto = localStorage.getItem('bruno-foto');
-  const emoji = localStorage.getItem('bruno-emoji') || '🐻';
-  if (foto) {
-    aplicarFoto(foto);
-  } else {
-    ['hero-avatar-emoji','sidebar-avatar-emoji','config-avatar-emoji'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = emoji;
-    });
-  }
-}
-
-// ═══════════════════════════════════════
-// GENERAR PDF
-// ═══════════════════════════════════════
-function generarPDF() {
-  showToast('📄 Generando informe...');
-
-  const nombre = localStorage.getItem('bruno-nombre') || 'Bruno';
-  const foto = localStorage.getItem('bruno-foto') || '';
-  const areas = calcularAreas();
-  const totalHitos = hitosBase.length;
-  const logrados = hitosBruno.filter(h => h.estado === 'LOGRADO').length;
-  const enProgreso = hitosBruno.filter(h => h.estado === 'EN PROGRESO').length;
-  const pct = totalHitos > 0 ? Math.round((logrados / totalHitos) * 100) : 0;
-  const todasEdades = hitosBruno.filter(h => h.estado === 'LOGRADO' && h.edadMeses > 0).map(h => h.edadMeses);
-  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b)=>a+b,0)/todasEdades.length) : 0;
-  const fecha = new Date().toLocaleDateString('es-EC', {year:'numeric',month:'long',day:'numeric'});
-
-  // Hitos logrados con fecha
-  const hitosLogrados = hitosBruno.filter(h => h.estado === 'LOGRADO').map(h => {
-    const base = hitosBase.find(b => String(b.id) === String(h.hitoId));
-    return base ? { hito: base.hito, area: base.area, fecha: h.fecha, edad: h.edadMeses } : null;
-  }).filter(Boolean);
-
-  // Barras de progreso por área (SVG)
-  const areasHTML = Object.entries(areas).map(([area, data]) => {
-    const p = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
-    const edadA = data.edades.length > 0 ? formatEdad(Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length)) : '—';
-    const cfg = getAreaConfig(area);
-    return `
-      <div style="margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-weight:700;font-size:14px;">${cfg.icon} ${area}</span>
-          <span style="font-size:12px;color:#666;">${data.logrados}/${data.total} hitos · Edad mad: ${edadA}</span>
-        </div>
-        <div style="background:#EDE8E2;border-radius:99px;height:10px;overflow:hidden;">
-          <div style="width:${p}%;height:100%;background:${cfg.color};border-radius:99px;"></div>
-        </div>
-        <div style="text-align:right;font-size:11px;color:#888;margin-top:2px;">${p}%</div>
-      </div>`;
-  }).join('');
-
-  // Hitos logrados tabla
-  const hitosTabla = hitosLogrados.length > 0 ? hitosLogrados.map(h => `
-    <tr style="border-bottom:1px solid #EDE8E2;">
-      <td style="padding:8px 6px;font-size:12px;">${h.hito}</td>
-      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.area}</td>
-      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.fecha || '—'}</td>
-      <td style="padding:8px 6px;font-size:12px;color:#666;">${h.edad ? formatEdad(h.edad) : '—'}</td>
-    </tr>`).join('') : '<tr><td colspan="4" style="padding:16px;text-align:center;color:#888;font-size:13px;">No hay hitos logrados aún</td></tr>';
-
-  // Gráfico de barras SVG por área
-  const areaEntries = Object.entries(areas);
-  const barWidth = areaEntries.length > 0 ? Math.min(60, Math.floor(400/areaEntries.length) - 10) : 60;
-  const barsHTML = areaEntries.map(([area, data], i) => {
-    const p = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
-    const cfg = getAreaConfig(area);
-    const x = i * (barWidth + 10) + 20;
-    const barH = Math.round((p/100) * 120);
-    const y = 140 - barH;
-    const shortName = area.length > 8 ? area.substring(0,8)+'.' : area;
-    return `
-      <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="4" fill="${cfg.color}" opacity="0.85"/>
-      <text x="${x + barWidth/2}" y="${y-6}" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">${p}%</text>
-      <text x="${x + barWidth/2}" y="158" text-anchor="middle" font-size="9" fill="#666">${shortName}</text>`;
-  }).join('');
-
-  const svgWidth = areaEntries.length * (barWidth + 10) + 40;
-
-  const fotoHTML = foto ? `<img src="${foto}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #C4714A;margin-right:20px;">` : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#C4714A,#D4A843);display:flex;align-items:center;justify-content:center;font-size:40px;margin-right:20px;">🐻</div>`;
-
-  const html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Informe de Desarrollo - ${nombre}</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1E2A35; }
-  .page { max-width: 800px; margin: 0 auto; padding: 40px; }
-  .header { background: linear-gradient(135deg, #1E2A35, #2C3A4A); color: white; padding: 32px; border-radius: 16px; margin-bottom: 28px; display: flex; align-items: center; }
-  .header-info h1 { font-size: 28px; margin: 0 0 4px; }
-  .header-info p { margin: 3px 0; font-size: 13px; opacity: .7; }
-  .badge { display: inline-block; background: rgba(255,255,255,.15); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-top: 8px; margin-right: 6px; }
-  .section { margin-bottom: 28px; }
-  .section-title { font-size: 18px; font-weight: bold; color: #1E2A35; border-left: 4px solid #C4714A; padding-left: 12px; margin-bottom: 16px; }
-  .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 24px; }
-  .stat-box { background: #F7F3EE; border-radius: 12px; padding: 16px; text-align: center; }
-  .stat-num { font-size: 28px; font-weight: bold; color: #C4714A; }
-  .stat-lbl { font-size: 12px; color: #8A9AAB; margin-top: 4px; }
-  table { width: 100%; border-collapse: collapse; }
-  th { background: #F7F3EE; padding: 10px 6px; font-size: 12px; text-align: left; color: #8A9AAB; text-transform: uppercase; letter-spacing: .5px; }
-  .footer { text-align: center; margin-top: 32px; padding-top: 16px; border-top: 1px solid #EDE8E2; font-size: 11px; color: #8A9AAB; }
-  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-</style>
-</head>
-<body>
-<div class="page">
-
-  <div class="header">
-    ${fotoHTML}
-    <div class="header-info">
-      <h1>Informe de Desarrollo</h1>
-      <p style="font-size:20px;font-weight:bold;margin:4px 0;">${nombre}</p>
-      <p>Fecha del informe: ${fecha}</p>
-      <div>
-        <span class="badge">✓ ${logrados} logrados</span>
-        <span class="badge">⟳ ${enProgreso} en progreso</span>
-        <span class="badge">🧠 Edad mad. ${edadMad > 0 ? formatEdad(edadMad) : 'Sin datos'}</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Resumen General</div>
-    <div class="stat-grid">
-      <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-lbl">Progreso Global</div></div>
-      <div class="stat-box"><div class="stat-num">${logrados}</div><div class="stat-lbl">Hitos Logrados</div></div>
-      <div class="stat-box"><div class="stat-num">${edadMad > 0 ? formatEdad(edadMad) : '—'}</div><div class="stat-lbl">Edad Madurativa</div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Gráfico de Progreso por Área</div>
-    <svg width="${svgWidth}" height="170" viewBox="0 0 ${svgWidth} 170" style="max-width:100%;">
-      <line x1="10" y1="20" x2="10" y2="145" stroke="#EDE8E2" stroke-width="1"/>
-      <line x1="10" y1="145" x2="${svgWidth-10}" y2="145" stroke="#EDE8E2" stroke-width="1"/>
-      ${barsHTML}
-    </svg>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Progreso por Área</div>
-    ${areasHTML}
-  </div>
-
-  <div class="section">
-    <div class="section-title">Hitos Logrados (${logrados})</div>
-    <table>
-      <thead><tr>
-        <th>Hito</th><th>Área</th><th>Fecha</th><th>Edad al lograr</th>
-      </tr></thead>
-      <tbody>${hitosTabla}</tbody>
-    </table>
-  </div>
-
-  <div class="footer">
-    Generado por App BRUNO · ${fecha} · Informe de seguimiento del desarrollo infantil
-  </div>
-
-</div>
-<script>window.onload = function() { window.print(); }<\/script>
-</body>
-</html>`;
-
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const nombreArchivo = `Informe_${nombre}_${new Date().toLocaleDateString('es-EC').replace(/\//g,'-')}.html`;
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = nombreArchivo;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  showToast('✅ Informe descargado — ábrelo y usa Imprimir → Guardar como PDF');
-}
-
-// ═══════════════════════════════════════
-// COLORES Y TEMAS
-// ═══════════════════════════════════════
-const PALETAS = {
-  terracota: { terra:'#C4714A', terra2:'#E8957A', navy:'#1E2A35', navy2:'#2C3A4A', cream:'#F7F3EE', sand:'#EDE8E2' },
-  oceano:    { terra:'#1A6B9A', terra2:'#3A8FBF', navy:'#0D2B3E', navy2:'#1A4A6B', cream:'#EEF5FA', sand:'#D8E8F0' },
-  bosque:    { terra:'#2D6A4F', terra2:'#52B788', navy:'#1B3D2F', navy2:'#2D6A4F', cream:'#EEF5F0', sand:'#D8EDE2' },
-  lavanda:   { terra:'#7B5EA7', terra2:'#9B7FBE', navy:'#2D1B4E', navy2:'#4A2D7A', cream:'#F5F0FA', sand:'#E8E0F0' },
-  rosa:      { terra:'#C4547A', terra2:'#E87AA0', navy:'#3E1B2D', navy2:'#6B2D4A', cream:'#FAF0F4', sand:'#F0D8E4' },
-};
-
-function lightenColor(hex, amount) {
-  const num = parseInt(hex.replace('#',''), 16);
-  const r = Math.min(255, (num >> 16) + amount);
-  const g = Math.min(255, ((num >> 8) & 0xff) + amount);
-  const b = Math.min(255, (num & 0xff) + amount);
-  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6,'0');
-}
-
-function aplicarColor(variable, valor) {
-  document.documentElement.style.setProperty('--'+variable, valor);
-  if (variable === 'terra') document.documentElement.style.setProperty('--terra2', lightenColor(valor, 30));
-  if (variable === 'navy') document.documentElement.style.setProperty('--navy2', lightenColor(valor, 15));
-  guardarColores();
-}
-
-function aplicarPaleta(nombre) {
-  const p = PALETAS[nombre];
-  if (!p) return;
-  Object.entries(p).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-  try {
-    document.getElementById('color-terra').value = p.terra;
-    document.getElementById('color-navy').value = p.navy;
-    document.getElementById('color-cream').value = p.cream;
-  } catch(e) {}
-  guardarColores();
-  showToast('🎨 Tema: ' + nombre);
-}
-
-function resetColores() { aplicarPaleta('terracota'); showToast('↺ Colores restaurados'); }
-
-function setModo(modo) {
-  if (modo === 'oscuro') {
-    document.documentElement.style.setProperty('--cream', '#1A1A2E');
-    document.documentElement.style.setProperty('--sand', '#2C2C4A');
-    document.documentElement.style.setProperty('--white', '#242438');
-    document.documentElement.style.setProperty('--ink', '#E8E0F0');
-    document.documentElement.style.setProperty('--muted', '#8A8AAB');
-    document.body.style.background = '#0D0D1A';
-  } else {
-    document.documentElement.style.setProperty('--cream', '#F7F3EE');
-    document.documentElement.style.setProperty('--sand', '#EDE8E2');
-    document.documentElement.style.setProperty('--white', '#ffffff');
-    document.documentElement.style.setProperty('--ink', '#1E2A35');
-    document.documentElement.style.setProperty('--muted', '#8A9AAB');
-    document.body.style.background = '#D8D2CA';
-  }
-  localStorage.setItem('bruno-modo', modo);
-  showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
-}
-
-function guardarColores() {
-  try {
-    const s = getComputedStyle(document.documentElement);
-    const c = ['terra','terra2','navy','navy2','cream','sand'].reduce((o,k) => { o[k]=s.getPropertyValue('--'+k).trim(); return o; }, {});
-    const json = JSON.stringify(c);
-    localStorage.setItem('bruno-colores', json);
-    const exp = new Date(); exp.setFullYear(exp.getFullYear() + 2);
-    document.cookie = `bruno-colores=${encodeURIComponent(json)};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
-    guardarEnIDB('colores', json);
-  } catch(e) {}
-}
-
-function setModo(modo) {
-  if (modo === 'oscuro') {
-    document.documentElement.style.setProperty('--cream', '#1A1A2E');
-    document.documentElement.style.setProperty('--sand', '#2C2C4A');
-    document.documentElement.style.setProperty('--white', '#242438');
-    document.documentElement.style.setProperty('--ink', '#E8E0F0');
-    document.documentElement.style.setProperty('--muted', '#8A8AAB');
-    document.body.style.background = '#0D0D1A';
-  } else {
-    document.documentElement.style.setProperty('--cream', '#F7F3EE');
-    document.documentElement.style.setProperty('--sand', '#EDE8E2');
-    document.documentElement.style.setProperty('--white', '#ffffff');
-    document.documentElement.style.setProperty('--ink', '#1E2A35');
-    document.documentElement.style.setProperty('--muted', '#8A9AAB');
-    document.body.style.background = '#D8D2CA';
-  }
-  localStorage.setItem('bruno-modo', modo);
-  const exp = new Date(); exp.setFullYear(exp.getFullYear() + 2);
-  document.cookie = `bruno-modo=${modo};expires=${exp.toUTCString()};path=/;SameSite=Lax`;
-  guardarEnIDB('modo', modo);
-  showToast(modo === 'oscuro' ? '🌙 Modo oscuro' : '☀️ Modo claro');
-}
-
-function getCookie(name) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
-
-// IndexedDB — más persistente en iOS Safari PWA
-let idb = null;
-function abrirIDB() {
-  return new Promise((resolve, reject) => {
-    if (idb) { resolve(idb); return; }
-    const req = indexedDB.open('bruno-app', 1);
-    req.onupgradeneeded = e => e.target.result.createObjectStore('config');
-    req.onsuccess = e => { idb = e.target.result; resolve(idb); };
-    req.onerror = reject;
-  });
-}
-async function guardarEnIDB(key, value) {
-  try { const db = await abrirIDB(); const tx = db.transaction('config','readwrite'); tx.objectStore('config').put(value, key); } catch(e) {}
-}
-async function leerDeIDB(key) {
-  try {
-    const db = await abrirIDB();
-    return new Promise(resolve => {
-      const req = db.transaction('config','readonly').objectStore('config').get(key);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
-    });
-  } catch(e) { return null; }
-}
-
-async function cargarColoresGuardados() {
-  try {
-    // 1. IndexedDB (más persistente en iOS PWA)
-    const idbColores = await leerDeIDB('colores');
-    const idbModo = await leerDeIDB('modo');
-    if (idbColores) {
-      const c = JSON.parse(idbColores);
-      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-      try {
-        document.getElementById('color-terra').value = c.terra || '#C4714A';
-        document.getElementById('color-navy').value = c.navy || '#1E2A35';
-        document.getElementById('color-cream').value = c.cream || '#F7F3EE';
-      } catch(e) {}
-    }
-    if (idbModo) { setModo(idbModo); return; }
-    // 2. Cookie
-    const cookieColores = getCookie('bruno-colores');
-    const cookieModo = getCookie('bruno-modo');
-    if (cookieColores) {
-      const c = JSON.parse(cookieColores);
-      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-    }
-    if (cookieModo) { setModo(cookieModo); return; }
-    // 3. localStorage
-    const lsColores = localStorage.getItem('bruno-colores');
-    if (lsColores) {
-      const c = JSON.parse(lsColores);
-      Object.entries(c).forEach(([k,v]) => document.documentElement.style.setProperty('--'+k, v));
-    }
-    const lsModo = localStorage.getItem('bruno-modo');
-    if (lsModo) setModo(lsModo);
-  } catch(e) {}
-}
-// ═══════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════
-document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-EC', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-document.querySelectorAll('.mnav-dot').forEach((d,i) => { if(i>0) d.style.display='none'; });
+function actualizarSaludo() {
+  const h = new Date().getHours();
+  const el = document.getElementById('hero-saludo');
+  if(el) el.textContent = h>=5&&h<12 ? 'Buenos días ☀️' : h>=12&&h<19 ? 'Buenas tardes 🌤️' : 'Buenas noches 🌙';
+}
 
-cargarColoresGuardados();
-cargarNombreGuardado();
-cargarFotoGuardada();
+document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.querySelectorAll('.mnav-dot').forEach((d,i)=>{ if(i>0) d.style.display='none'; });
 actualizarSaludo();
 cargarDatos();
 </script>
