@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1E2A35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BRUNO</title>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1E2A35; --navy2:#2C3A4A;
+  --cream:#F7F3EE; --sand:#EDE8E2;
+  --terra:#C4714A; --terra2:#E8957A;
+  --sage:#7A9E8E; --amber:#D4A843;
+  --purple:#9B7FBE; --ink:#1E2A35;
+  --muted:#8A9AAB; --white:#fff;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); min-height:100vh; }
+.app { display:flex; min-height:100vh; max-width:1200px; margin:0 auto; background:var(--cream); box-shadow:0 0 80px rgba(0,0,0,.2); }
+
+/* SIDEBAR */
+.sidebar { width:240px; flex-shrink:0; background:var(--navy); display:flex; flex-direction:column; padding:36px 0 24px; position:sticky; top:0; height:100vh; }
+.sidebar-logo { padding:0 24px 28px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:16px; }
+.sidebar-logo-title { font-family:'Gilda Display',serif; font-size:32px; color:#fff; line-height:1; }
+.sidebar-logo-sub { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.35); margin-top:4px; }
+.sidebar-nav { display:flex; flex-direction:column; gap:2px; flex:1; }
+.nav-item { display:flex; align-items:center; gap:12px; padding:12px 24px; cursor:pointer; background:none; border:none; width:100%; text-align:left; transition:background .15s; }
+.nav-item:hover { background:rgba(255,255,255,.06); }
+.nav-item.active { background:rgba(255,255,255,.1); }
+.nav-item-icon { font-size:18px; }
+.nav-item-label { font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:rgba(255,255,255,.5); }
+.nav-item.active .nav-item-label { color:#fff; }
+.sidebar-footer { padding:16px 24px 0; border-top:1px solid rgba(255,255,255,.08); margin-top:16px; }
+.bruno-chip { display:flex; align-items:center; gap:10px; }
+.bruno-avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.bruno-name { font-size:13px; font-weight:700; color:#fff; }
+.bruno-sub { font-size:10px; color:rgba(255,255,255,.4); margin-top:1px; }
+
+/* MAIN */
+.main { flex:1; overflow-y:auto; min-width:0; }
+.screen { display:none; min-height:100vh; }
+.screen.active { display:block; }
+
+/* HERO */
+.hero { background:linear-gradient(160deg,var(--navy2),var(--navy)); padding:40px 32px 28px; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(196,113,74,.25) 0%,transparent 70%); }
+.hero-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.hero-greeting { font-size:11px; color:rgba(255,255,255,.5); letter-spacing:1.5px; text-transform:uppercase; }
+.hero-name { font-family:'Gilda Display',serif; font-size:32px; color:#fff; line-height:1; margin-top:2px; }
+.hero-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,var(--terra),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:26px; }
+.hero-card { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px; display:flex; align-items:center; gap:18px; }
+.ring-wrap { position:relative; width:60px; height:60px; flex-shrink:0; }
+.ring-wrap svg { transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:rgba(255,255,255,.12); stroke-width:5; }
+.ring-fill { fill:none; stroke:var(--terra2); stroke-width:5; stroke-linecap:round; stroke-dasharray:138; transition:stroke-dashoffset 1s ease; }
+.ring-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Gilda Display',serif; font-size:16px; color:#fff; }
+.hero-info h3 { font-size:14px; font-weight:700; color:#fff; }
+.hero-info p { font-size:12px; color:rgba(255,255,255,.5); margin-top:2px; }
+.hero-pills { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.pill { padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; }
+.pill-green { background:rgba(122,158,142,.3); color:#A8C4B8; }
+.pill-amber { background:rgba(212,168,67,.3); color:var(--amber); }
+
+/* CONTENT */
+.content { padding:24px 32px; }
+.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.sec-title { font-family:'Gilda Display',serif; font-size:20px; color:var(--ink); }
+.sec-link { font-size:12px; color:var(--terra); font-weight:700; cursor:pointer; background:none; border:none; }
+
+/* AREAS */
+.areas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-bottom:28px; }
+.area-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:16px 14px; cursor:pointer; transition:transform .15s; }
+.area-card:hover { transform:translateY(-2px); }
+.area-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:10px; }
+.area-name { font-size:10px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+.area-bar { height:5px; background:var(--sand); border-radius:99px; overflow:hidden; margin-bottom:5px; }
+.area-bar-fill { height:100%; border-radius:99px; transition:width .8s ease; }
+.area-pct { font-size:12px; font-weight:700; color:var(--navy2); }
+
+/* QA */
+.qa-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-bottom:28px; }
+.qa-btn { background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:16px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+.qa-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.qa-label { font-size:13px; font-weight:700; color:var(--navy2); }
+.qa-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+
+/* HITOS */
+.hito-item { display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--sand); border-radius:14px; padding:14px 16px; margin-bottom:8px; cursor:pointer; transition:transform .15s; }
+.hito-item:hover { transform:translateX(2px); }
+.hito-dot { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.hito-body { flex:1; min-width:0; }
+.hito-name { font-size:14px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hito-meta { display:flex; align-items:center; gap:6px; margin-top:3px; flex-wrap:wrap; }
+.hito-tag { font-size:11px; color:var(--muted); }
+.status { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.s-logrado { background:#D8EDE6; color:#5A9080; }
+.s-progreso { background:#F5E8C0; color:#A07020; }
+.s-pendiente { background:var(--sand); color:var(--muted); }
+.hito-edad { font-size:12px; color:var(--muted); flex-shrink:0; white-space:nowrap; }
+
+/* PAGE HEADER */
+.page-header { padding:32px 32px 0; margin-bottom:4px; }
+.page-title { font-family:'Gilda Display',serif; font-size:28px; color:var(--ink); }
+.page-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+
+/* BIG AREAS */
+.big-areas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+.big-area-card { border-radius:18px; padding:22px; position:relative; overflow:hidden; cursor:pointer; transition:transform .15s; }
+.big-area-card:hover { transform:translateY(-2px); }
+.big-area-card::before { content:''; position:absolute; top:-20px; right:-20px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.12); }
+.bac-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.bac-left { display:flex; align-items:center; gap:12px; }
+.bac-icon { width:42px; height:42px; border-radius:12px; background:rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; font-size:22px; }
+.bac-name { font-family:'Gilda Display',serif; font-size:18px; color:#fff; }
+.bac-count { font-size:11px; color:rgba(255,255,255,.65); margin-top:2px; }
+.bac-pct { font-family:'Gilda Display',serif; font-size:30px; color:#fff; }
+.bac-bar { height:6px; background:rgba(255,255,255,.2); border-radius:99px; overflow:hidden; }
+.bac-fill { height:100%; background:rgba(255,255,255,.85); border-radius:99px; }
+.bac-edad { display:inline-flex; align-items:center; gap:4px; margin-top:10px; font-size:11px; color:rgba(255,255,255,.7); background:rgba(255,255,255,.15); padding:3px 10px; border-radius:20px; }
+
+/* FILTER */
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; padding:16px 32px 0; }
+.filter-btn { padding:7px 16px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s; }
+.filter-btn.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* DIARIO */
+.diario-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+.form-card { background:var(--white); border:1px solid var(--sand); border-radius:16px; padding:18px; }
+.form-card-title { font-size:13px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; margin-bottom:16px; }
+.form-row { margin-bottom:14px; }
+.form-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:7px; display:block; }
+.form-options { display:flex; gap:6px; flex-wrap:wrap; }
+.form-option { padding:7px 14px; border-radius:20px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer; transition:all .15s; }
+.form-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
+.form-input { width:100%; padding:10px 14px; border:1.5px solid var(--sand); border-radius:10px; font-family:'Nunito',sans-serif; font-size:13px; color:var(--ink); background:var(--cream); outline:none; }
+.form-input:focus { border-color:var(--terra); }
+.btn-save { width:100%; padding:14px; border-radius:12px; background:var(--terra); border:none; color:#fff; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:20px; padding:24px; width:100%; max-width:400px; }
+.modal-title { font-family:'Gilda Display',serif; font-size:20px; color:var(--ink); margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
+.modal-options { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.modal-option { padding:12px 16px; border-radius:12px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; text-align:left; display:flex; align-items:center; gap:10px; }
+.modal-option.selected { background:var(--navy); border-color:var(--navy); color:#fff; }
+.modal-input { margin-bottom:12px; }
+.modal-btns { display:flex; gap:8px; }
+.btn-cancel { flex:1; padding:12px; border-radius:10px; border:1.5px solid var(--sand); background:var(--white); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:var(--muted); cursor:pointer; }
+.btn-confirm { flex:1; padding:12px; border-radius:10px; border:none; background:var(--terra); font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#fff; cursor:pointer; }
+
+/* TOAST */
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
+.toast.show { opacity:1; }
+.loading { display:flex; align-items:center; justify-content:center; padding:40px; color:var(--muted); font-size:14px; gap:10px; }
+.spinner { width:20px; height:20px; border:2px solid var(--sand); border-top-color:var(--terra); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
+.empty-state-icon { font-size:40px; margin-bottom:12px; }
+
+/* MOBILE */
+.mobile-nav { display:none; }
+@media (max-width:768px) {
+  body { background:var(--cream); }
+  .app { flex-direction:column; box-shadow:none; max-width:100%; }
+  .sidebar { display:none; }
+  .mobile-nav { display:flex; position:fixed; bottom:0; left:0; right:0; background:var(--white); border-top:1px solid var(--sand); padding:8px 0 20px; z-index:100; }
+  .mnav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; padding:4px 0; }
+  .mnav-icon { font-size:22px; line-height:1; }
+  .mnav-label { font-size:9px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); }
+  .mnav-btn.active .mnav-label { color:var(--terra); }
+  .mnav-dot { width:4px; height:4px; border-radius:50%; background:var(--terra); }
+  .screen { padding-bottom:80px; }
+  .hero { padding:52px 20px 24px; }
+  .content { padding:18px 16px; }
+  .page-header { padding:20px 16px 0; }
+  .filter-row { padding:12px 16px 0; }
+  .areas-grid { grid-template-columns:repeat(3,1fr); gap:10px; }
+  .qa-grid { grid-template-columns:1fr 1fr; }
+  .big-areas-grid { grid-template-columns:1fr; }
+  .diario-grid { grid-template-columns:1fr; }
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.hero { animation:fadeUp .35s ease both; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL HITO -->
+<div class="modal-overlay" id="modal-hito">
+  <div class="modal">
+    <div class="modal-title" id="modal-hito-nombre">Hito</div>
+    <div class="modal-sub" id="modal-hito-area">Área</div>
+    <div class="modal-options">
+      <button class="modal-option" onclick="selectEstado(this,'LOGRADO')">✅ Logrado</button>
+      <button class="modal-option" onclick="selectEstado(this,'EN PROGRESO')">⟳ En progreso</button>
+      <button class="modal-option" onclick="selectEstado(this,'PENDIENTE')">· Pendiente</button>
+    </div>
+    <div class="modal-input">
+      <label class="form-label">Edad cuando lo logró (meses) — opcional</label>
+      <input class="form-input" type="number" id="modal-edad" placeholder="ej. 18">
+    </div>
+    <div class="modal-input">
+      <label class="form-label">Notas — opcional</label>
+      <input class="form-input" type="text" id="modal-notas" placeholder="Observaciones...">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="guardarHito()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">BRUNO</div>
+      <div class="sidebar-logo-sub">App de Desarrollo</div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" id="snav-inicio" onclick="goTo('inicio')"><div class="nav-item-icon">🏠</div><div class="nav-item-label">Inicio</div></button>
+      <button class="nav-item" id="snav-areas" onclick="goTo('areas')"><div class="nav-item-icon">🌱</div><div class="nav-item-label">Avances</div></button>
+      <button class="nav-item" id="snav-hitos" onclick="goTo('hitos')"><div class="nav-item-icon">🎯</div><div class="nav-item-label">Hitos</div></button>
+      <button class="nav-item" id="snav-diario" onclick="goTo('diario')"><div class="nav-item-icon">📋</div><div class="nav-item-label">Diario</div></button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="bruno-chip">
+        <div class="bruno-avatar">🐻</div>
+        <div><div class="bruno-name" id="sidebar-nombre">Bruno</div><div class="bruno-sub" id="sidebar-edad-mad">Sin datos aún</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- INICIO -->
+    <div class="screen active" id="screen-inicio">
+      <div class="hero">
+        <div class="hero-top">
+          <div><div class="hero-greeting" id="hero-saludo">Buenos días ☀️</div><div class="hero-name">Hola, <span id="hero-nombre">Bruno</span></div></div>
+          <div class="hero-avatar">🐻</div>
+        </div>
+        <div class="hero-card">
+          <div class="ring-wrap">
+            <svg width="60" height="60" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="22"/><circle class="ring-fill" id="ring-fill" cx="30" cy="30" r="22" style="stroke-dashoffset:138"/></svg>
+            <div class="ring-center" id="ring-pct">0%</div>
+          </div>
+          <div class="hero-info">
+            <h3>Progreso Global</h3>
+            <p id="hero-progreso-sub">Cargando datos...</p>
+            <div class="hero-pills">
+              <span class="pill pill-green" id="pill-logrados">— logrados</span>
+              <span class="pill pill-amber" id="pill-progreso">— en curso</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="sec-header"><div class="sec-title">Avances por Área</div><button class="sec-link" onclick="goTo('areas')">Ver todas →</button></div>
+        <div class="areas-grid" id="inicio-areas"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+        <div class="sec-header"><div class="sec-title">Acciones rápidas</div></div>
+        <div class="qa-grid">
+          <div class="qa-btn" onclick="goTo('diario')"><div class="qa-icon" style="background:#FDF0EA">📝</div><div><div class="qa-label">Diario</div><div class="qa-sub">Registrar hoy</div></div></div>
+          <div class="qa-btn" onclick="goTo('hitos')"><div class="qa-icon" style="background:#E6F2EE">🎯</div><div><div class="qa-label">Hitos</div><div class="qa-sub">Marcar logro</div></div></div>
+          <div class="qa-btn"><div class="qa-icon" style="background:#FDF5E0">😊</div><div><div class="qa-label">Emoción</div><div class="qa-sub">Cómo está hoy</div></div></div>
+          <div class="qa-btn"><div class="qa-icon" style="background:#EAF0F5">🔍</div><div><div class="qa-label">Observación</div><div class="qa-sub">Anotar algo</div></div></div>
+        </div>
+        <div class="sec-header"><div class="sec-title">Últimos Hitos</div><button class="sec-link" onclick="goTo('hitos')">Ver todos →</button></div>
+        <div id="inicio-hitos"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+      </div>
+    </div>
+
+    <!-- AVANCES -->
+    <div class="screen" id="screen-areas">
+      <div class="page-header"><div class="page-title">Avances de Áreas de Desarrollo</div><div class="page-sub" id="areas-sub">Cargando...</div></div>
+      <div class="content"><div class="big-areas-grid" id="areas-grid"><div class="loading"><div class="spinner"></div> Cargando...</div></div></div>
+    </div>
+
+    <!-- HITOS -->
+    <div class="screen" id="screen-hitos">
+      <div class="page-header"><div class="page-title">Hitos de Bruno</div><div class="page-sub" id="hitos-sub">Cargando...</div></div>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterHitos(this,'todos')">Todos</button>
+        <button class="filter-btn" onclick="filterHitos(this,'LOGRADO')">✓ Logrados</button>
+        <button class="filter-btn" onclick="filterHitos(this,'EN PROGRESO')">⟳ En progreso</button>
+        <button class="filter-btn" onclick="filterHitos(this,'PENDIENTE')">· Pendientes</button>
+      </div>
+      <div class="content" id="hitos-list"><div class="loading"><div class="spinner"></div> Cargando...</div></div>
+    </div>
+
+    <!-- DIARIO -->
+    <div class="screen" id="screen-diario">
+      <div class="page-header"><div class="page-title">Diario de Hoy</div><div class="page-sub" id="fecha-hoy"></div></div>
+      <div class="content">
+        <div class="diario-grid">
+          <div class="form-card">
+            <div class="form-card-title">😴 Sueño</div>
+            <div class="form-row"><label class="form-label">Calidad del sueño</label><div class="form-options"><div class="form-option" onclick="sel(this)">BIEN</div><div class="form-option" onclick="sel(this)">REGULAR</div><div class="form-option" onclick="sel(this)">MALO</div></div></div>
+            <div class="form-row"><label class="form-label">Levantada nocturna</label><div class="form-options"><div class="form-option" onclick="sel(this)">SI</div><div class="form-option" onclick="sel(this)">NO</div></div></div>
+            <div class="form-row"><label class="form-label">Horas de sueño</label><input class="form-input" id="d-horas" type="number" placeholder="ej. 8" style="width:120px"></div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">🍽️ Alimentación</div>
+            <div class="form-row"><label class="form-label">Horario comida</label><div class="form-options"><div class="form-option" onclick="sel(this)">DESAYUNO</div><div class="form-option" onclick="sel(this)">ALMUERZO</div><div class="form-option" onclick="sel(this)">MERIENDA</div><div class="form-option" onclick="sel(this)">SNACKS</div></div></div>
+            <div class="form-row"><label class="form-label">Menú consumido</label><input class="form-input" id="d-menu" type="text" placeholder="¿Qué comió hoy?"></div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">🏫 Escuela y Terapias</div>
+            <div class="form-row"><label class="form-label">Estado en escuela</label><div class="form-options"><div class="form-option" onclick="sel(this)">BIEN</div><div class="form-option" onclick="sel(this)">REGULAR</div><div class="form-option" onclick="sel(this)">DIFICIL</div></div></div>
+            <div class="form-row"><label class="form-label">Terapias hoy</label><div class="form-options"><div class="form-option" onclick="sel(this)">SI</div><div class="form-option" onclick="sel(this)">NO</div></div></div>
+            <div class="form-row"><label class="form-label">Tipo de terapia</label><div class="form-options"><div class="form-option" onclick="sel(this)">LENGUAJE</div><div class="form-option" onclick="sel(this)">TO</div><div class="form-option" onclick="sel(this)">PSICOPEDAGOGIA</div><div class="form-option" onclick="sel(this)">DEPORTIVA</div><div class="form-option" onclick="sel(this)">OTRA</div></div></div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">✨ Logro y Notas</div>
+            <div class="form-row"><label class="form-label">Logro del día</label><input class="form-input" id="d-logro" type="text" placeholder="¿Algo especial que hizo hoy?"></div>
+            <div class="form-row"><label class="form-label">Notas generales</label><textarea class="form-input" id="d-notas" rows="3" placeholder="Observaciones, cambios, notas médicas..."></textarea></div>
+          </div>
+        </div>
+        <button class="btn-save" id="btn-guardar-diario" onclick="guardarDiario()">💾 Guardar registro del día</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<nav class="mobile-nav">
+  <button class="mnav-btn active" id="mnav-inicio" onclick="goTo('inicio')"><div class="mnav-icon">🏠</div><div class="mnav-label">Inicio</div><div class="mnav-dot"></div></button>
+  <button class="mnav-btn" id="mnav-areas" onclick="goTo('areas')"><div class="mnav-icon">🌱</div><div class="mnav-label">Avances</div></button>
+  <button class="mnav-btn" id="mnav-hitos" onclick="goTo('hitos')"><div class="mnav-icon">🎯</div><div class="mnav-label">Hitos</div></button>
+  <button class="mnav-btn" id="mnav-diario" onclick="goTo('diario')"><div class="mnav-icon">📋</div><div class="mnav-label">Diario</div></button>
+</nav>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0jEWtwYJUF5zp3ZoXS812OpQBvSAk5_SbkBoq1XTE02SXG4j9Kjg5Y61S9l65o3Wx/exec';
+
+function genID() { return Math.random().toString(36).substr(2, 9); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function fetchSheet(sheetName) {
+  try {
+    const url = `${SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.values || [];
+  } catch(e) {
+    console.error('fetchSheet error:', e);
+    return [];
+  }
+}
+
+async function appendRow(sheetName, values) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'append', sheet: sheetName, values })
+  });
+  return res.json();
+}
+
+async function updateCell(range, value) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'update', range, value })
+  });
+  return res.json();
+}
+  'Lenguaje':          { icon:'💬', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
+  'Motricidad gruesa': { icon:'🤸', bg:'#E6F2EE', color:'#7A9E8E', grad:'linear-gradient(135deg,#5A8A7A,#7A9E8E)' },
+  'Motricidad fina':   { icon:'✋', bg:'#FDF5E0', color:'#D4A843', grad:'linear-gradient(135deg,#C49030,#D4A843)' },
+  'Social':            { icon:'👥', bg:'#EAF0F5', color:'#4A5D72', grad:'linear-gradient(135deg,#3A4D62,#4A5D72)' },
+  'Cognición':         { icon:'🧩', bg:'#F2EEF8', color:'#9B7FBE', grad:'linear-gradient(135deg,#7A62A0,#9B7FBE)' },
+  'Autonomía':         { icon:'🌟', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
+};
+
+function formatEdad(meses) {
+  if (!meses || meses === 0) return '—';
+  meses = parseInt(meses);
+  if (meses <= 24) return meses + ' meses';
+  const años = Math.floor(meses / 12);
+  const m = meses % 12;
+  if (m === 0) return años + (años === 1 ? ' año' : ' años');
+  return años + ' ' + (años === 1 ? 'año' : 'años') + ' y ' + m + ' mes' + (m !== 1 ? 'es' : '');
+}
+
+function getAreaConfig(area) {
+  return AREA_CONFIG[area] || { icon:'📌', bg:'#EDE8E2', color:'#8A9AAB', grad:'linear-gradient(135deg,#8A9AAB,#4A5D72)' };
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function genID() { return Math.random().toString(36).substr(2, 9); }
+
+// FETCH con timeout
+async function fetchSheet(range) {
+  const url = `${BASE_URL}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data.values || [];
+  } catch(e) {
+    clearTimeout(timeout);
+    console.error('fetchSheet error:', e.message);
+    return [];
+  }
+}
+
+async function appendRow(sheetName, values) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'append', sheet: sheetName, values })
+  });
+  return res.json();
+}
+
+async function updateCell(range, value) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'update', range, value })
+  });
+  return res.json();
+}
+
+// STATE
+let hitosBase = [];
+let hitosBruno = [];
+let currentHitoModal = null;
+let estadoSeleccionado = null;
+
+// CARGAR DATOS
+async function cargarDatos() {
+  try {
+    const [hbRows, hBrunoRows] = await Promise.all([
+      fetchSheet('Hitos Base'),
+      fetchSheet('Hitos Bruno')
+    ]);
+
+    hitosBase = hbRows.slice(1).map(r => ({
+      id: r[0] || '',
+      area: r[1] || '',
+      edadRef: r[2] || '',
+      hito: r[3] || '',
+      minMeses: parseInt(r[5]) || 0,
+      maxMeses: parseInt(r[6]) || 0,
+    }));
+
+    hitosBruno = hBrunoRows.slice(1).filter(r => r[0]).map(r => ({
+      id: r[0] || '',
+      fecha: r[1] || '',
+      hitoId: r[2] || '',
+      estado: r[3] || 'PENDIENTE',
+      notas: r[4] || '',
+      edadMeses: parseInt(r[7]) || 0,
+    }));
+
+    renderTodo();
+  } catch(e) {
+    console.error(e);
+    renderTodo();
+    showToast('⚠️ Error cargando datos');
+  }
+}
+
+function getEstadoHito(hitoBaseId) {
+  return hitosBruno.find(h => String(h.hitoId) === String(hitoBaseId)) || null;
+}
+
+function calcularAreas() {
+  const areas = {};
+  hitosBase.forEach(h => {
+    if (!areas[h.area]) areas[h.area] = { total:0, logrados:0, edades:[] };
+    areas[h.area].total++;
+    const estado = getEstadoHito(h.id);
+    if (estado && estado.estado === 'LOGRADO') {
+      areas[h.area].logrados++;
+      if (estado.edadMeses > 0) areas[h.area].edades.push(estado.edadMeses);
+    }
+  });
+  return areas;
+}
+
+function renderTodo() {
+  const areas = calcularAreas();
+  const totalHitos = hitosBase.length;
+  const logrados = hitosBruno.filter(h => h.estado === 'LOGRADO').length;
+  const enProgreso = hitosBruno.filter(h => h.estado === 'EN PROGRESO').length;
+  const pct = totalHitos > 0 ? Math.round((logrados / totalHitos) * 100) : 0;
+
+  const offset = 138 - (138 * pct / 100);
+  document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  document.getElementById('ring-pct').textContent = pct + '%';
+  document.getElementById('hero-progreso-sub').textContent = `${logrados} de ${totalHitos} hitos logrados`;
+  document.getElementById('pill-logrados').textContent = `✓ ${logrados} logrados`;
+  document.getElementById('pill-progreso').textContent = `⟳ ${enProgreso} en curso`;
+
+  const todasEdades = hitosBruno.filter(h => h.estado === 'LOGRADO' && h.edadMeses > 0).map(h => h.edadMeses);
+  const edadMad = todasEdades.length > 0 ? Math.round(todasEdades.reduce((a,b)=>a+b,0)/todasEdades.length) : 0;
+  document.getElementById('sidebar-edad-mad').textContent = edadMad > 0 ? `Edad mad. ${formatEdad(edadMad)}` : 'Sin datos aún';
+
+  renderAreasInicio(areas);
+  renderAreasGrid(areas);
+  renderHitosList();
+  renderHitosInicio();
+  document.getElementById('areas-sub').textContent = `${Object.keys(areas).length} áreas · ${logrados} hitos logrados`;
+  document.getElementById('hitos-sub').textContent = `${totalHitos} hitos · ${logrados} logrados`;
+}
+
+function renderAreasInicio(areas) {
+  const el = document.getElementById('inicio-areas');
+  if (!Object.keys(areas).length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><p>Sin áreas aún</p></div>'; return; }
+  el.innerHTML = Object.entries(areas).map(([area, data]) => {
+    const cfg = getAreaConfig(area);
+    const pct = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
+    return `<div class="area-card" onclick="goTo('areas')">
+      <div class="area-icon" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="area-name">${area}</div>
+      <div class="area-bar"><div class="area-bar-fill" style="width:${pct}%;background:${cfg.color}"></div></div>
+      <div class="area-pct">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAreasGrid(areas) {
+  const el = document.getElementById('areas-grid');
+  if (!Object.keys(areas).length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><p>Sin áreas aún</p></div>'; return; }
+  el.innerHTML = Object.entries(areas).map(([area, data]) => {
+    const cfg = getAreaConfig(area);
+    const pct = data.total > 0 ? Math.round((data.logrados/data.total)*100) : 0;
+    const edadMad = data.edades.length > 0 ? formatEdad(Math.round(data.edades.reduce((a,b)=>a+b,0)/data.edades.length)) : '—';
+    return `<div class="big-area-card" style="background:${cfg.grad}">
+      <div class="bac-top"><div class="bac-left"><div class="bac-icon">${cfg.icon}</div><div><div class="bac-name">${area}</div><div class="bac-count">${data.logrados} de ${data.total} hitos</div></div></div><div class="bac-pct">${pct}%</div></div>
+      <div class="bac-bar"><div class="bac-fill" style="width:${pct}%"></div></div>
+      <div class="bac-edad">🧠 Edad mad. estimada: ${edadMad}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHitosList(filtro='todos') {
+  const el = document.getElementById('hitos-list');
+  let html = '';
+  hitosBase.forEach(h => {
+    const estadoObj = getEstadoHito(h.id);
+    const estado = estadoObj ? estadoObj.estado : 'PENDIENTE';
+    if (filtro !== 'todos' && estado !== filtro) return;
+    const cfg = getAreaConfig(h.area);
+    const edadLogrado = estadoObj && estadoObj.edadMeses > 0 ? formatEdad(estadoObj.edadMeses) : '—';
+    const statusClass = estado==='LOGRADO' ? 's-logrado' : estado==='EN PROGRESO' ? 's-progreso' : 's-pendiente';
+    const statusText = estado==='LOGRADO' ? '✓ Logrado' : estado==='EN PROGRESO' ? '⟳ En progreso' : '· Pendiente';
+    html += `<div class="hito-item" onclick="openModal('${h.id}')">
+      <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="hito-body"><div class="hito-name">${h.hito}</div>
+      <div class="hito-meta"><span class="status ${statusClass}">${statusText}</span><span class="hito-tag">${h.area} · ${h.edadRef}</span></div></div>
+      <div class="hito-edad">${edadLogrado}</div>
+    </div>`;
+  });
+  el.innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">🎯</div><p>No hay hitos en esta categoría</p></div>';
+}
+
+function renderHitosInicio() {
+  const el = document.getElementById('inicio-hitos');
+  const recientes = hitosBruno.filter(h => h.estado==='LOGRADO').slice(-4).reverse();
+  if (!recientes.length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎯</div><p>Toca un hito para marcarlo como logrado</p></div>'; return; }
+  el.innerHTML = recientes.map(h => {
+    const base = hitosBase.find(b => String(b.id)===String(h.hitoId));
+    if (!base) return '';
+    const cfg = getAreaConfig(base.area);
+    return `<div class="hito-item" onclick="openModal('${base.id}')">
+      <div class="hito-dot" style="background:${cfg.bg}">${cfg.icon}</div>
+      <div class="hito-body"><div class="hito-name">${base.hito}</div>
+      <div class="hito-meta"><span class="status s-logrado">✓ Logrado</span><span class="hito-tag">${base.area}</span></div></div>
+      <div class="hito-edad">${formatEdad(h.edadMeses)}</div>
+    </div>`;
+  }).join('');
+}
+
+// MODAL
+function openModal(hitoId) {
+  const base = hitosBase.find(h => String(h.id)===String(hitoId));
+  if (!base) return;
+  currentHitoModal = base;
+  estadoSeleccionado = null;
+  document.getElementById('modal-hito-nombre').textContent = base.hito;
+  document.getElementById('modal-hito-area').textContent = base.area + ' · ' + base.edadRef;
+  document.getElementById('modal-edad').value = '';
+  document.getElementById('modal-notas').value = '';
+  document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
+  const estadoActual = getEstadoHito(hitoId);
+  if (estadoActual) {
+    estadoSeleccionado = estadoActual.estado;
+    document.querySelectorAll('.modal-option').forEach(o => {
+      if ((estadoActual.estado==='LOGRADO' && o.textContent.includes('Logrado')) ||
+          (estadoActual.estado==='EN PROGRESO' && o.textContent.includes('progreso')) ||
+          (estadoActual.estado==='PENDIENTE' && o.textContent.includes('Pendiente'))) {
+        o.classList.add('selected');
+      }
+    });
+    if (estadoActual.edadMeses) document.getElementById('modal-edad').value = estadoActual.edadMeses;
+    if (estadoActual.notas) document.getElementById('modal-notas').value = estadoActual.notas;
+  }
+  document.getElementById('modal-hito').classList.add('open');
+}
+
+function selectEstado(el, estado) {
+  document.querySelectorAll('.modal-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  estadoSeleccionado = estado;
+}
+
+function closeModal() {
+  document.getElementById('modal-hito').classList.remove('open');
+  currentHitoModal = null;
+  estadoSeleccionado = null;
+}
+
+async function guardarHito() {
+  if (!estadoSeleccionado) { showToast('Selecciona un estado primero'); return; }
+  const edad = document.getElementById('modal-edad').value;
+  const notas = document.getElementById('modal-notas').value;
+  const fecha = new Date().toLocaleDateString('es-EC');
+  const existente = getEstadoHito(currentHitoModal.id);
+  try {
+    if (existente) {
+      const rows = await fetchSheet('Hitos Bruno');
+      const dataRows = rows.slice(1);
+      const rowIdx = dataRows.findIndex(r => String(r[0])===String(existente.id));
+      if (rowIdx >= 0) {
+        const rowNum = rowIdx + 2;
+        await updateCell(`Hitos Bruno!D${rowNum}`, estadoSeleccionado);
+        if (edad) await updateCell(`Hitos Bruno!H${rowNum}`, edad);
+        if (notas) await updateCell(`Hitos Bruno!E${rowNum}`, notas);
+      }
+    } else {
+      await appendRow('Hitos Bruno', [genID(), fecha, currentHitoModal.id, estadoSeleccionado, notas, '', '1', edad||'']);
+    }
+    closeModal();
+    showToast('✅ Hito guardado');
+    await cargarDatos();
+  } catch(e) {
+    showToast('Error guardando. Intenta de nuevo.');
+    console.error(e);
+  }
+}
+
+// DIARIO
+function getSelectedOpt(container) {
+  const s = container.querySelector('.form-option.selected');
+  return s ? s.textContent.trim() : '';
+}
+
+async function guardarDiario() {
+  const btn = document.getElementById('btn-guardar-diario');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  const cards = document.querySelectorAll('#screen-diario .form-card');
+  const fecha = new Date().toLocaleDateString('es-EC');
+  try {
+    await appendRow('Diario', [
+      genID(), fecha,
+      getSelectedOpt(cards[0]),
+      cards[0].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent||'',
+      document.getElementById('d-horas').value,
+      getSelectedOpt(cards[1]),
+      document.getElementById('d-menu').value,
+      getSelectedOpt(cards[2]),
+      cards[2].querySelectorAll('.form-options')[1].querySelector('.selected')?.textContent||'',
+      cards[2].querySelectorAll('.form-options')[2].querySelector('.selected')?.textContent||'',
+      document.getElementById('d-logro').value,
+      '', document.getElementById('d-notas').value
+    ]);
+    showToast('✅ Diario guardado');
+    document.querySelectorAll('#screen-diario .form-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('d-horas').value='';
+    document.getElementById('d-menu').value='';
+    document.getElementById('d-logro').value='';
+    document.getElementById('d-notas').value='';
+  } catch(e) { showToast('Error guardando'); console.error(e); }
+  btn.disabled=false; btn.textContent='💾 Guardar registro del día';
+}
+
+// NAVEGACIÓN
+const SCREENS = ['inicio','areas','hitos','diario'];
+function goTo(id) {
+  SCREENS.forEach(s => {
+    document.getElementById('screen-'+s).classList.remove('active');
+    ['snav-','mnav-'].forEach(p => { const el=document.getElementById(p+s); if(el) el.classList.remove('active'); });
+  });
+  document.getElementById('screen-'+id).classList.add('active');
+  ['snav-','mnav-'].forEach(p => { const el=document.getElementById(p+id); if(el) el.classList.add('active'); });
+  document.querySelector('.main')?.scrollTo(0,0);
+  window.scrollTo(0,0);
+}
+
+function sel(el) { el.parentElement.querySelectorAll('.form-option').forEach(s=>s.classList.remove('selected')); el.classList.add('selected'); }
+
+function filterHitos(btn, estado) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHitosList(estado);
+}
+
+// INIT
+function actualizarSaludo() {
+  const h = new Date().getHours();
+  const el = document.getElementById('hero-saludo');
+  if(el) el.textContent = h>=5&&h<12 ? 'Buenos días ☀️' : h>=12&&h<19 ? 'Buenas tardes 🌤️' : 'Buenas noches 🌙';
+}
+
+document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-EC',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.querySelectorAll('.mnav-dot').forEach((d,i)=>{ if(i>0) d.style.display='none'; });
+actualizarSaludo();
+cargarDatos();
+</script>
+</body>
+</html>
