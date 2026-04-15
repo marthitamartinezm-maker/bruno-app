@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
+>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -335,11 +334,46 @@ body { font-family:'Nunito',sans-serif; background:#D8D2CA; color:var(--ink); mi
 </nav>
 
 <script>
-const API_KEY = 'AIzaSyBYBXC-uRyvhH4evhbiS56fHczysJY6BoQ';
-const SHEET_ID = '1N7VpP18ApZSzLINkdu7sG_BTC7dnfNUB017rDrlcENU';
-const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0jEWtwYJUF5zp3ZoXS812OpQBvSAk5_SbkBoq1XTE02SXG4j9Kjg5Y61S9l65o3Wx/exec';
 
-const AREA_CONFIG = {
+function genID() { return Math.random().toString(36).substr(2, 9); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function fetchSheet(sheetName) {
+  try {
+    const url = `${SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.values || [];
+  } catch(e) {
+    console.error('fetchSheet error:', e);
+    return [];
+  }
+}
+
+async function appendRow(sheetName, values) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'append', sheet: sheetName, values })
+  });
+  return res.json();
+}
+
+async function updateCell(range, value) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'update', range, value })
+  });
+  return res.json();
+}
   'Lenguaje':          { icon:'💬', bg:'#FDF0EA', color:'#C4714A', grad:'linear-gradient(135deg,#C4714A,#E8957A)' },
   'Motricidad gruesa': { icon:'🤸', bg:'#E6F2EE', color:'#7A9E8E', grad:'linear-gradient(135deg,#5A8A7A,#7A9E8E)' },
   'Motricidad fina':   { icon:'✋', bg:'#FDF5E0', color:'#D4A843', grad:'linear-gradient(135deg,#C49030,#D4A843)' },
@@ -389,22 +423,20 @@ async function fetchSheet(range) {
   }
 }
 
-async function appendRow(sheet, values) {
-  const url = `${BASE_URL}/values/${encodeURIComponent(sheet + '!A1')}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS&key=${API_KEY}`;
-  const res = await fetch(url, {
+async function appendRow(sheetName, values) {
+  const res = await fetch(SCRIPT_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [values] })
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'append', sheet: sheetName, values })
   });
   return res.json();
 }
 
 async function updateCell(range, value) {
-  const url = `${BASE_URL}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ values: [[value]] })
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'update', range, value })
   });
   return res.json();
 }
@@ -419,11 +451,11 @@ let estadoSeleccionado = null;
 async function cargarDatos() {
   try {
     const [hbRows, hBrunoRows] = await Promise.all([
-      fetchSheet('Hitos Base!A2:G200'),
-      fetchSheet('Hitos Bruno!A2:H200')
+      fetchSheet('Hitos Base'),
+      fetchSheet('Hitos Bruno')
     ]);
 
-    hitosBase = hbRows.map(r => ({
+    hitosBase = hbRows.slice(1).map(r => ({
       id: r[0] || '',
       area: r[1] || '',
       edadRef: r[2] || '',
@@ -432,7 +464,7 @@ async function cargarDatos() {
       maxMeses: parseInt(r[6]) || 0,
     }));
 
-    hitosBruno = hBrunoRows.filter(r => r[0]).map(r => ({
+    hitosBruno = hBrunoRows.slice(1).filter(r => r[0]).map(r => ({
       id: r[0] || '',
       fecha: r[1] || '',
       hitoId: r[2] || '',
@@ -608,8 +640,9 @@ async function guardarHito() {
   const existente = getEstadoHito(currentHitoModal.id);
   try {
     if (existente) {
-      const rows = await fetchSheet('Hitos Bruno!A2:H200');
-      const rowIdx = rows.findIndex(r => String(r[0])===String(existente.id));
+      const rows = await fetchSheet('Hitos Bruno');
+      const dataRows = rows.slice(1);
+      const rowIdx = dataRows.findIndex(r => String(r[0])===String(existente.id));
       if (rowIdx >= 0) {
         const rowNum = rowIdx + 2;
         await updateCell(`Hitos Bruno!D${rowNum}`, estadoSeleccionado);
